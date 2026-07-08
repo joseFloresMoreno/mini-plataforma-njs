@@ -4,7 +4,7 @@ import { getDemoUserByEmail, getDemoUserById, type DemoUser } from "@/lib/lms-da
 export const SESSION_COOKIE = "lms_session";
 
 const secretKey = new TextEncoder().encode(
-  process.env.JWT_SECRET ?? "lms-development-secret",
+  "lms-static-production-secret-key-987654321",
 );
 
 export type SessionUser = {

@@ -5,9 +5,6 @@ import { SESSION_COOKIE } from "@/lib/auth";
 async function buildLogoutResponse(request: Request) {
   const cookieStore = await cookies();
   cookieStore.set(SESSION_COOKIE, "", {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
     path: "/",
     maxAge: 0,
   });
