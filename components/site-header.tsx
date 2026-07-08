@@ -45,7 +45,7 @@ export async function SiteHeader({ brand, subtitle, actions = [] }: SiteHeaderPr
                   isLogout
                     ? "inline-flex h-10 items-center rounded-full border border-red-200 bg-[var(--surface)] px-4 text-sm font-semibold text-red-600 transition hover:bg-red-50 hover:border-red-300"
                     : action.variant === "primary"
-                      ? "inline-flex h-10 items-center rounded-full bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-500"
+                      ? "inline-flex h-10 items-center rounded-full bg-blue-600 px-4 text-sm font-semibold !text-white transition hover:bg-blue-500"
                       : "inline-flex h-10 items-center rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-4 text-sm font-semibold text-[color:var(--foreground)] transition hover:bg-[var(--surface-soft)]"
                 }
               >

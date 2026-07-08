@@ -52,7 +52,7 @@ export function CourseCard({ course }: CourseCardProps) {
       <div className="mt-6">
         <Link
           href={`/courses/${course.id}`}
-          className="inline-flex h-11 w-full items-center justify-center rounded-full bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-500"
+          className="inline-flex h-11 w-full items-center justify-center rounded-full bg-blue-600 px-4 text-sm font-semibold !text-white transition hover:bg-blue-500"
         >
           Abrir curso
         </Link>

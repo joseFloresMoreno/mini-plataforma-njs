@@ -160,7 +160,7 @@ export function CourseViewer({
                       }}
                       className={`flex w-full items-center justify-between rounded-2xl border px-3 py-3 text-left text-sm transition ${
                         active
-                          ? "border-blue-600 bg-blue-600 text-white font-medium"
+                          ? "border-blue-600 bg-blue-600 !text-white font-medium"
                           : locked
                             ? "border-dashed border-[color:var(--border)] bg-[var(--surface-soft)] text-slate-400"
                             : "border-[color:var(--border)] bg-[var(--surface)] text-[color:var(--foreground)] hover:border-blue-200 hover:bg-[var(--surface-soft)]"
@@ -251,7 +251,7 @@ export function CourseViewer({
                 type="button"
                 onClick={handleNextClick}
                 disabled={isNextDisabled}
-                className={`inline-flex h-11 items-center justify-center rounded-full px-5 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-40 ${
+                className={`inline-flex h-11 items-center justify-center rounded-full px-5 text-sm font-semibold !text-white transition disabled:cursor-not-allowed disabled:opacity-40 ${
                   isLastSection 
                     ? "bg-green-600 hover:bg-green-500" 
                     : "bg-blue-600 hover:bg-blue-500"

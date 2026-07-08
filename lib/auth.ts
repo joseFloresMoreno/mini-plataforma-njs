@@ -15,6 +15,19 @@ export type SessionUser = {
   initials: string;
 };
 
+export function getCookieValue(cookieString: string | null | undefined, name: string): string | undefined {
+  if (!cookieString) return undefined;
+  const cookiesList = cookieString.split(";");
+  for (const cookie of cookiesList) {
+    const parts = cookie.split("=");
+    const cookieName = parts[0]?.trim();
+    if (cookieName === name) {
+      return parts.slice(1).join("=");
+    }
+  }
+  return undefined;
+}
+
 export function pickSessionUser(user: DemoUser): SessionUser {
   const initials = user.name
     .split(" ")

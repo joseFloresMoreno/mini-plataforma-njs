@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionUser, SESSION_COOKIE } from "@/lib/auth";
+import { getSessionUser, SESSION_COOKIE, getCookieValue } from "@/lib/auth";
 
 const protectedPaths = ["/dashboard", "/courses"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const token = request.cookies.get(SESSION_COOKIE)?.value;
+  let token = request.cookies.get(SESSION_COOKIE)?.value;
+  if (!token) {
+    token = getCookieValue(request.headers.get("cookie"), SESSION_COOKIE);
+  }
   const isProtectedRoute = protectedPaths.some((path) => pathname.startsWith(path));
   
   const sessionUser = await getSessionUser(token).catch(() => null);

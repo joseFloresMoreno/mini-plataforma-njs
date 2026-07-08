@@ -1,13 +1,18 @@
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { CourseCard } from "@/components/course-card";
 import { SiteHeader } from "@/components/site-header";
-import { SESSION_COOKIE, getSessionUser } from "@/lib/auth";
+import { SESSION_COOKIE, getSessionUser, getCookieValue } from "@/lib/auth";
 import { getDashboardCourses } from "@/lib/lms-data";
 
 export default async function DashboardPage() {
   const cookieStore = await cookies();
-  const sessionUser = await getSessionUser(cookieStore.get(SESSION_COOKIE)?.value);
+  let token = cookieStore.get(SESSION_COOKIE)?.value;
+  if (!token) {
+    const reqHeaders = await headers();
+    token = getCookieValue(reqHeaders.get("cookie"), SESSION_COOKIE);
+  }
+  const sessionUser = await getSessionUser(token);
 
   if (!sessionUser) {
     redirect("/login");

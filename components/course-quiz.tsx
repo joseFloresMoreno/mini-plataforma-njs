@@ -70,7 +70,7 @@ export function CourseQuiz({ questions, onPass }: CourseQuizProps) {
                     onClick={() => handleSelect(q.id, optIdx)}
                     className={`px-4 py-3 text-left text-sm rounded-2xl border transition ${
                       isSelected
-                        ? "border-blue-600 bg-blue-600 text-white font-medium"
+                        ? "border-blue-600 bg-blue-600 !text-white font-medium"
                         : "border-[color:var(--border)] bg-[var(--surface)] text-[color:var(--foreground)] hover:border-slate-300 hover:bg-[var(--surface-soft)]"
                     }`}
                     disabled={isPassed}
@@ -102,10 +102,10 @@ export function CourseQuiz({ questions, onPass }: CourseQuizProps) {
           type="button"
           onClick={handleValidate}
           disabled={isPassed}
-          className={`px-6 py-2.5 rounded-full text-sm font-semibold transition ${
+          className={`px-6 py-2.5 rounded-full text-sm font-semibold !text-white transition ${
             isPassed
-              ? "bg-green-600 text-white cursor-not-allowed"
-              : "bg-blue-600 text-white hover:bg-blue-500"
+              ? "bg-green-600 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-500"
           }`}
         >
           {isPassed ? "Aprobado" : "Validar Respuestas"}
