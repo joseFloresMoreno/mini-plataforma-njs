@@ -47,7 +47,8 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
       }
 
       if (payload?.token) {
-        document.cookie = `lms_session=${payload.token}; path=/; max-age=${60 * 60 * 24 * 7}; samesite=lax`;
+        const isSecure = typeof window !== "undefined" && window.location.protocol === "https:";
+        document.cookie = `lms_session=${payload.token}; path=/; max-age=${60 * 60 * 24 * 7}; ${isSecure ? "secure;" : ""} samesite=lax`;
       }
 
       router.replace(redirectTo);
