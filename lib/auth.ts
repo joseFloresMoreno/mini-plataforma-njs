@@ -51,8 +51,14 @@ export async function getSessionUser(token?: string | null) {
     return null;
   }
 
+  // Strip leading and trailing double quotes if present (common browser wrapping)
+  let cleanToken = token.trim();
+  if (cleanToken.startsWith('"') && cleanToken.endsWith('"')) {
+    cleanToken = cleanToken.slice(1, -1);
+  }
+
   try {
-    const user = getDemoUserById(token);
+    const user = getDemoUserById(cleanToken);
     return user ? pickSessionUser(user) : null;
   } catch {
     return null;
