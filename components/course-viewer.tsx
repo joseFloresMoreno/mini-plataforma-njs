@@ -1,0 +1,239 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import type { Course } from "@/lib/lms-data";
+import { flattenCourseSections } from "@/lib/lms-data";
+
+type CourseViewerProps = {
+  course: Course;
+  initialCompletedSectionIds: string[];
+  initialActiveSectionId: string;
+};
+
+export function CourseViewer({
+  course,
+  initialCompletedSectionIds,
+  initialActiveSectionId,
+}: CourseViewerProps) {
+  const sections = useMemo(() => flattenCourseSections(course), [course]);
+  const storageKey = `lms-progress:${course.id}`;
+  const [completedSectionIds, setCompletedSectionIds] = useState(initialCompletedSectionIds);
+  const [activeSectionId, setActiveSectionId] = useState(initialActiveSectionId);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        storageKey,
+        JSON.stringify(completedSectionIds),
+      );
+    } catch {
+      // Ignore persistence failures in non-browser contexts.
+    }
+  }, [completedSectionIds, storageKey]);
+
+  const activeSectionIndex = sections.findIndex(
+    (section) => section.id === activeSectionId,
+  );
+  const activeSection = sections[activeSectionIndex] ?? sections[0];
+  const isSectionCompleted = completedSectionIds.includes(activeSection.id);
+  const completedPercent =
+    sections.length === 0
+      ? 0
+      : Math.round((completedSectionIds.length / sections.length) * 100);
+
+  const isSectionUnlocked = (index: number) => {
+    if (index === 0) {
+      return true;
+    }
+
+    return completedSectionIds.includes(sections[index - 1]?.id ?? "");
+  };
+
+  const markCurrentAsComplete = () => {
+    setCompletedSectionIds((current) =>
+      current.includes(activeSection.id)
+        ? current
+        : [...current, activeSection.id],
+    );
+  };
+
+  const goToNextSection = () => {
+    if (!isSectionCompleted) {
+      markCurrentAsComplete();
+    }
+
+    if (activeSectionIndex < sections.length - 1) {
+      const nextSection = sections[activeSectionIndex + 1];
+      setActiveSectionId(nextSection.id);
+    }
+  };
+
+  const goToPreviousSection = () => {
+    if (activeSectionIndex > 0) {
+      const previousSection = sections[activeSectionIndex - 1];
+      setActiveSectionId(previousSection.id);
+    }
+  };
+
+  const currentModule = course.modules.find((module) =>
+    module.sections.some((section) => section.id === activeSection.id),
+  );
+
+  const remainingSections = sections.filter(
+    (section) => !completedSectionIds.includes(section.id),
+  ).length;
+
+  return (
+    <div className="grid gap-6 xl:grid-cols-[290px_minmax(0,1fr)]">
+      <aside className="rounded-[1.75rem] border border-[color:var(--border)] bg-[var(--surface)] p-5 shadow-sm xl:sticky xl:top-24 xl:self-start">
+        <div className="space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-700">
+            Contenido del curso
+          </p>
+          <h2 className="text-2xl font-semibold text-[color:var(--foreground)]">{course.title}</h2>
+          <p className="text-sm text-slate-500">{remainingSections} pendientes · {completedPercent}% completado</p>
+        </div>
+
+        <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-200">
+          <div className="h-full rounded-full bg-blue-600" style={{ width: `${completedPercent}%` }} />
+        </div>
+
+        <div className="mt-5 space-y-5">
+          {course.modules.map((module) => (
+            <div key={module.id} className="space-y-3">
+              <div>
+                <p className="text-sm font-semibold text-[color:var(--foreground)]">{module.title}</p>
+                <p className="text-xs text-slate-500">{module.description}</p>
+              </div>
+              <div className="space-y-2 pl-1">
+                {module.sections.map((section) => {
+                  const sectionIndex = sections.findIndex((candidate) => candidate.id === section.id);
+                  const locked = !isSectionUnlocked(sectionIndex) && activeSection.id !== section.id;
+                  const active = activeSection.id === section.id;
+                  const completed = completedSectionIds.includes(section.id);
+
+                  return (
+                    <button
+                      key={section.id}
+                      type="button"
+                      onClick={() => {
+                        if (!locked) {
+                          setActiveSectionId(section.id);
+                        }
+                      }}
+                      className={`flex w-full items-center justify-between rounded-2xl border px-3 py-3 text-left text-sm transition ${
+                        active
+                          ? "border-blue-200 bg-blue-50 text-blue-900"
+                          : locked
+                            ? "border-dashed border-[color:var(--border)] bg-[var(--surface-soft)] text-slate-400"
+                            : "border-[color:var(--border)] bg-[var(--surface)] text-[color:var(--foreground)] hover:border-blue-200 hover:bg-[var(--surface-soft)]"
+                      }`}
+                    >
+                      <span className="flex min-w-0 flex-1 items-center gap-3">
+                        <span
+                          className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold ${
+                            completed
+                              ? "border-green-200 bg-green-50 text-green-700"
+                              : active
+                                ? "border-blue-200 bg-blue-600 text-white"
+                                  : "border-[color:var(--border)] bg-[var(--surface)] text-slate-400"
+                          }`}
+                        >
+                          {completed ? "✓" : active ? "•" : ""}
+                        </span>
+                        <span className="min-w-0 truncate">{section.title}</span>
+                      </span>
+                      <span className="ml-3 text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
+                        {locked ? "Bloqueado" : completed ? "Hecho" : active ? "Actual" : "TODO"}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </aside>
+
+      <section className="space-y-6 rounded-[1.75rem] border border-[color:var(--border)] bg-[var(--surface)] p-5 shadow-sm sm:p-6 lg:p-8">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-700">
+              {currentModule?.title}
+            </p>
+            <h2 className="mt-2 text-3xl font-semibold text-[color:var(--foreground)]">{activeSection.title}</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">{activeSection.summary}</p>
+          </div>
+          <div className="rounded-3xl border border-[color:var(--border)] bg-[var(--surface-soft)] px-4 py-3 text-right">
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Estado</p>
+            <p className="mt-1 text-sm font-semibold text-[color:var(--foreground)]">
+              {isSectionCompleted ? "Completada" : "En progreso"}
+            </p>
+          </div>
+        </div>
+
+        <article className="rounded-[1.5rem] border border-[color:var(--border)] bg-[var(--surface)] p-6 sm:p-8">
+          <div className="max-w-none space-y-6 text-[15px] leading-8 text-[color:var(--foreground)]">
+            <p>{activeSection.summary}</p>
+            <p>
+              El curso está pensado como una sabana de lectura: el contenido puede crecer sin problema y la navegación permanece abajo para no interrumpir el flujo de estudio.
+            </p>
+            <p>
+              Esta sección forma parte de un recorrido controlado por el progreso. Cuando termines esta parte, el siguiente item del sidebar se desbloquea automáticamente.
+            </p>
+            <div className="rounded-3xl border border-blue-100 bg-blue-50 p-5 text-blue-950">
+              <p className="font-semibold">Punto clave</p>
+              <p className="mt-2">
+                El menú lateral funciona como una lista de tareas pendientes: lo completado se marca, lo siguiente queda visible pero bloqueado, y el contenido central siempre se puede leer con scroll.
+              </p>
+            </div>
+            <p>
+              Si el material se extiende más que la pantalla, el artículo simplemente continúa hacia abajo. La barra lateral no necesita seguir el alto del contenido; solo acompaña de forma visual.
+            </p>
+            <div className="space-y-3 rounded-3xl border border-[color:var(--border)] bg-[var(--surface-soft)] p-5">
+              <p className="text-sm font-semibold text-[color:var(--foreground)]">Referencia visual</p>
+              <p className="text-sm leading-7 text-slate-600">
+                La composición busca un panel principal amplio, un lateral compacto y controlado, y controles de navegación ubicados al final del contenido, no flotando arriba.
+              </p>
+            </div>
+            <div className="rounded-3xl border border-[color:var(--border)] bg-[var(--surface-soft)] p-5">
+              <div
+                className="prose prose-slate max-w-none prose-p:leading-8 prose-li:leading-8"
+                dangerouslySetInnerHTML={{ __html: activeSection.html }}
+              />
+            </div>
+            <div className="overflow-hidden rounded-2xl border border-[color:var(--border)] bg-slate-200">
+              <iframe
+                title={activeSection.title}
+                className="aspect-video w-full"
+                src={activeSection.videoUrl}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+
+          <div className="mt-8 border-t border-[color:var(--border)] pt-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={goToPreviousSection}
+                disabled={activeSectionIndex <= 0}
+                className="inline-flex h-11 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-5 text-sm font-semibold text-[color:var(--foreground)] transition hover:bg-[var(--surface-soft)] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Atrás
+              </button>
+              <button
+                type="button"
+                onClick={goToNextSection}
+                className="inline-flex h-11 items-center justify-center rounded-full bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-500"
+              >
+                {isSectionCompleted ? "Siguiente" : "Marcar completada y seguir"}
+              </button>
+            </div>
+          </div>
+        </article>
+      </section>
+    </div>
+  );
+}

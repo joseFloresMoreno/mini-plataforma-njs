@@ -1,64 +1,91 @@
-import Image from "next/image";
+import Link from "next/link";
+import { SiteHeader } from "@/components/site-header";
+import { demoCourses, demoUsers } from "@/lib/lms-data";
 
 export default function Home() {
+  const totalModules = demoCourses.reduce(
+    (count, course) => count + course.modules.length,
+    0,
+  );
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div>
+      <SiteHeader
+        brand="AulaZero"
+        subtitle="Plataforma LMS en Next.js"
+        actions={[
+          { href: "/login", label: "Entrar", variant: "primary" },
+          { href: "/dashboard", label: "Mis cursos" },
+        ]}
+      />
+      <main className="px-6 py-8 sm:px-10 lg:px-12">
+        <section className="mx-auto grid min-h-[calc(100vh-7rem)] w-full max-w-7xl gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="space-y-6 rounded-[2rem] border border-[color:var(--border)] bg-[var(--surface)] p-6 shadow-sm sm:p-8 lg:p-10">
+            <div className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700">
+              LMS listo para Vercel
+            </div>
+            <div className="space-y-4">
+              <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-5xl lg:text-6xl">
+                Una base LMS clara, ligera y enfocada en cursos, progreso y continuidad.
+              </h1>
+              <p className="max-w-2xl text-lg leading-8 text-slate-600">
+                Autenticación segura, dashboard como primera vista del usuario, visor de contenido con sidebar tipo TODO y una estructura pensada para crecer sin pelear con el despliegue.
+              </p>
+            </div>
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <Link
+                href="/login"
+                className="inline-flex h-12 items-center justify-center rounded-full bg-blue-600 px-6 text-sm font-semibold text-white transition hover:bg-blue-500"
+              >
+                Ir al login
+              </Link>
+              <Link
+                href="/dashboard"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-6 text-sm font-semibold text-[color:var(--foreground)] transition hover:bg-[var(--surface-soft)]"
+              >
+                Ver cursos
+              </Link>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div className="rounded-3xl border border-[color:var(--border)] bg-[var(--surface)] p-5">
+                <p className="text-3xl font-semibold text-[color:var(--foreground)]">{demoCourses.length}</p>
+                <p className="mt-2 text-sm text-slate-500">Cursos de demo</p>
+              </div>
+              <div className="rounded-3xl border border-[color:var(--border)] bg-[var(--surface)] p-5">
+                <p className="text-3xl font-semibold text-[color:var(--foreground)]">{totalModules}</p>
+                <p className="mt-2 text-sm text-slate-500">Módulos iniciales</p>
+              </div>
+              <div className="rounded-3xl border border-[color:var(--border)] bg-[var(--surface)] p-5">
+                <p className="text-3xl font-semibold text-[color:var(--foreground)]">{demoUsers.length}</p>
+                <p className="mt-2 text-sm text-slate-500">Usuarios listos</p>
+              </div>
+            </div>
+          </div>
+
+          <aside className="space-y-4 rounded-[2rem] border border-[color:var(--border)] bg-[var(--surface)] p-6 shadow-sm sm:p-8 lg:p-10">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-700">
+              Flujo del alumno
+            </p>
+            <div className="space-y-3">
+              {[
+                "Bienvenida y login",
+                "Dashboard con cursos e interacciones",
+                "Visor de curso con TODO lateral",
+                "Contenido largo con navegación abajo",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl border border-[color:var(--border)] bg-[var(--surface-soft)] px-4 py-4 text-sm font-medium text-[color:var(--foreground)]"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+            <div className="rounded-3xl border border-blue-100 bg-blue-50 p-5 text-sm leading-7 text-blue-900">
+              El modo claro es el predeterminado. Usa el switch en la esquina superior para alternar a oscuro.
+            </div>
+          </aside>
+        </section>
       </main>
     </div>
   );

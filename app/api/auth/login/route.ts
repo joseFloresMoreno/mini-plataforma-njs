@@ -1,0 +1,40 @@
+import { NextResponse } from "next/server";
+import { findLoginUser, pickSessionUser, signSessionToken, SESSION_COOKIE } from "@/lib/auth";
+
+type LoginBody = {
+  email?: string;
+  password?: string;
+};
+
+export async function POST(request: Request) {
+  const body = (await request.json().catch(() => null)) as LoginBody | null;
+
+  if (!body?.email || !body?.password) {
+    return NextResponse.json(
+      { error: "Debes completar correo y contraseña." },
+      { status: 400 },
+    );
+  }
+
+  const user = findLoginUser(body.email, body.password);
+
+  if (!user) {
+    return NextResponse.json(
+      { error: "Credenciales inválidas." },
+      { status: 401 },
+    );
+  }
+
+  const token = await signSessionToken(user);
+  const response = NextResponse.json({ user: pickSessionUser(user) });
+
+  response.cookies.set(SESSION_COOKIE, token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7,
+  });
+
+  return response;
+}
