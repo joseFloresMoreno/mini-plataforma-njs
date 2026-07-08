@@ -1,0 +1,3 @@
+{
+  "buildCommand": "prisma db push && prisma db seed && next build"
+}
