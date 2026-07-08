@@ -34,5 +34,8 @@ export async function POST(request: Request) {
     maxAge: 60 * 60 * 24 * 7,
   });
 
-  return NextResponse.json({ user: pickSessionUser(user) });
+  return NextResponse.json({ 
+    user: pickSessionUser(user),
+    token
+  });
 }

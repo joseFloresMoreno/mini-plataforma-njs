@@ -38,12 +38,16 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
         body: JSON.stringify(form),
       });
 
-      if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as
-          | { error?: string }
-          | null;
+      const payload = (await response.json().catch(() => null)) as
+        | { error?: string; token?: string }
+        | null;
 
+      if (!response.ok) {
         throw new Error(payload?.error ?? "No se pudo iniciar sesión");
+      }
+
+      if (payload?.token) {
+        document.cookie = `lms_session=${payload.token}; path=/; max-age=${60 * 60 * 24 * 7}; samesite=lax`;
       }
 
       router.replace(redirectTo);
