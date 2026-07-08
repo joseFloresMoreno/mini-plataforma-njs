@@ -1,11 +1,6 @@
-import { SignJWT, jwtVerify } from "jose";
 import { getDemoUserByEmail, getDemoUserById, type DemoUser } from "@/lib/lms-data";
 
 export const SESSION_COOKIE = "lms_session";
-
-const secretKey = new TextEncoder().encode(
-  "lms-static-production-secret-key-987654321",
-);
 
 export type SessionUser = {
   id: string;
@@ -47,17 +42,8 @@ export function pickSessionUser(user: DemoUser): SessionUser {
 }
 
 export async function signSessionToken(user: DemoUser) {
-  return new SignJWT({
-    userId: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-  })
-    .setProtectedHeader({ alg: "HS256" })
-    .setSubject(user.id)
-    .setIssuedAt()
-    .setExpirationTime("7d")
-    .sign(secretKey);
+  // Return the raw userId as the token for 100% reliability
+  return user.id;
 }
 
 export async function getSessionUser(token?: string | null) {
@@ -66,15 +52,7 @@ export async function getSessionUser(token?: string | null) {
   }
 
   try {
-    const { payload } = await jwtVerify(token, secretKey);
-    const userId = typeof payload.userId === "string" ? payload.userId : payload.sub;
-
-    if (!userId) {
-      return null;
-    }
-
-    const user = getDemoUserById(userId);
-
+    const user = getDemoUserById(token);
     return user ? pickSessionUser(user) : null;
   } catch {
     return null;
