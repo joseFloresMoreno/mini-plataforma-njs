@@ -46,7 +46,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
   return (
     <div>
       <SiteHeader
-        brand="AulaZero"
+        brand="Mini-Plataforma"
         subtitle={course.title}
         actions={[
           { href: "/dashboard", label: "← Volver a cursos" },

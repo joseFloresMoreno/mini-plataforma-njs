@@ -18,7 +18,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   return (
     <div>
       <SiteHeader
-        brand="AulaZero"
+        brand="Mini-Plataforma"
         subtitle="Acceso al sistema"
         actions={[{ href: "/", label: "Inicio" }]}
       />

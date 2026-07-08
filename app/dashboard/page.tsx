@@ -31,7 +31,7 @@ export default async function DashboardPage() {
   return (
     <div>
       <SiteHeader
-        brand="AulaZero"
+        brand="Mini-Plataforma"
         subtitle={`Bienvenida, ${sessionUser.name}`}
         actions={[
           { href: "/", label: "Inicio" },

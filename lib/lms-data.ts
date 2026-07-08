@@ -1,4 +1,4 @@
-import { kv } from "@vercel/kv";
+import { createClient } from "@vercel/kv";
 
 export type DemoRole = "student" | "admin";
 
@@ -264,8 +264,17 @@ export const demoCourses: Course[] = [
 const isKvConfigured = !!(
   process.env.KV_URL ||
   process.env.KV_REST_API_URL ||
-  process.env.KV_REST_API_TOKEN
+  process.env.KV_REST_API_TOKEN ||
+  process.env.UPSTASH_REDIS_REST_URL ||
+  process.env.UPSTASH_REDIS_REST_TOKEN
 );
+
+const kvClient = isKvConfigured
+  ? createClient({
+      url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || process.env.KV_URL || "",
+      token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || "",
+    })
+  : null;
 
 // Fallback in-memory progress for local development or when KV is not set up
 const localProgress: Record<string, Record<string, string[]>> = {
@@ -297,9 +306,9 @@ export function flattenCourseSections(course: Course) {
 }
 
 export async function getUserCompletedSectionIds(userId: string, courseId: string): Promise<string[]> {
-  if (isKvConfigured) {
+  if (isKvConfigured && kvClient) {
     try {
-      const progress = await kv.get<string[]>(`lms:progress:${userId}:${courseId}`);
+      const progress = await kvClient.get<string[]>(`lms:progress:${userId}:${courseId}`);
       return progress ?? [];
     } catch (e) {
       console.error("Error reading from Vercel KV:", e);
@@ -312,9 +321,9 @@ export async function saveSectionProgress(userId: string, courseId: string, sect
   const current = await getUserCompletedSectionIds(userId, courseId);
   const updated = current.includes(sectionId) ? current : [...current, sectionId];
   
-  if (isKvConfigured) {
+  if (isKvConfigured && kvClient) {
     try {
-      await kv.set(`lms:progress:${userId}:${courseId}`, updated);
+      await kvClient.set(`lms:progress:${userId}:${courseId}`, updated);
     } catch (e) {
       console.error("Error writing to Vercel KV:", e);
     }

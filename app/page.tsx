@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div>
       <SiteHeader
-        brand="AulaZero"
+        brand="Mini-Plataforma"
         subtitle="Plataforma LMS en Next.js"
         actions={[
           { href: "/login", label: "Entrar", variant: "primary" },
