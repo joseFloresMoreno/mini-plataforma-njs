@@ -58,15 +58,15 @@ export async function getSessionUser(token?: string | null) {
   }
 
   try {
-    const user = getDemoUserById(cleanToken);
+    const user = await getDemoUserById(cleanToken);
     return user ? pickSessionUser(user) : null;
   } catch {
     return null;
   }
 }
 
-export function findLoginUser(email: string, password: string) {
-  const user = getDemoUserByEmail(email);
+export async function findLoginUser(email: string, password: string) {
+  const user = await getDemoUserByEmail(email);
 
   if (!user || user.password !== password) {
     return null;

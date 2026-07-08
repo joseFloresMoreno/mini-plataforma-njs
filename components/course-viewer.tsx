@@ -34,6 +34,56 @@ export function CourseViewer({
   const activeSectionHasQuiz = !!activeSection.quiz && activeSection.quiz.length > 0;
   const [quizPassed, setQuizPassed] = useState(false);
 
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
+
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem("lms_user");
+      if (storedUser) {
+        const parsed = JSON.parse(storedUser);
+        setIsAdmin(parsed.role === "admin");
+      }
+    } catch {
+      // Ignore
+    }
+  }, []);
+
+  const handleResetProgress = async () => {
+    if (!window.confirm("¿Seguro que deseas reiniciar el progreso de este curso?")) {
+      return;
+    }
+    setIsResetting(true);
+    try {
+      const storedUser = localStorage.getItem("lms_user");
+      if (!storedUser) return;
+      const parsed = JSON.parse(storedUser);
+      
+      const res = await fetch("/api/reset-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          courseId: course.id,
+          adminId: parsed.id,
+        }),
+      });
+
+      if (res.ok) {
+        setCompletedSectionIds([]);
+        setActiveSectionId(sections[0]?.id || "");
+        alert("Progreso reiniciado correctamente.");
+        router.refresh();
+      } else {
+        alert("Error al reiniciar progreso.");
+      }
+    } catch {
+      alert("Error de conexión.");
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
   useEffect(() => {
     setQuizPassed(isSectionCompleted);
   }, [activeSectionId, isSectionCompleted]);
@@ -189,6 +239,18 @@ export function CourseViewer({
               </div>
             </div>
           ))}
+          {isAdmin && (
+            <div className="mt-6 pt-6 border-t border-[color:var(--border)]">
+              <button
+                type="button"
+                onClick={handleResetProgress}
+                disabled={isResetting}
+                className="inline-flex h-10 w-full items-center justify-center rounded-full border border-red-200 bg-red-50 px-4 text-xs font-semibold text-red-600 transition hover:bg-red-100 hover:border-red-300 disabled:opacity-50"
+              >
+                {isResetting ? "Reiniciando..." : "Reiniciar Avance (Admin)"}
+              </button>
+            </div>
+          )}
         </div>
       </aside>
 

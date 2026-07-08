@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "userId and courseId are required" }, { status: 400 });
   }
 
-  const user = getDemoUserById(userId);
+  const user = await getDemoUserById(userId);
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }

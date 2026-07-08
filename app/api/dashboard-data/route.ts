@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDashboardCourses, getDemoUserById } from "@/lib/lms-data";
+import { getDashboardCourses, getDemoUserById, demoCourses, getUserCompletedSectionIds } from "@/lib/lms-data";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "userId is required" }, { status: 400 });
   }
 
-  const user = getDemoUserById(userId);
+  const user = await getDemoUserById(userId);
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
@@ -29,6 +29,33 @@ export async function GET(request: Request) {
   const currentCourse = courses[0];
   const nextLesson = currentCourse?.nextSectionTitle ?? "Sin curso asignado";
 
+  const allCourses = await Promise.all(
+    demoCourses.map(async (course) => {
+      const isEnrolled = user.enrolledCourseIds.includes(course.id);
+      const sections = course.modules.flatMap((m) => m.sections);
+      const completedSections = isEnrolled
+        ? await getUserCompletedSectionIds(user.id, course.id)
+        : [];
+      const completedCount = completedSections.length;
+      const totalSections = sections.length;
+      const progressPercent =
+        totalSections === 0
+          ? 0
+          : Math.round((completedCount / totalSections) * 100);
+
+      return {
+        ...course,
+        isEnrolled,
+        completedSections: completedCount,
+        totalSections,
+        progressPercent,
+        nextSectionTitle: isEnrolled
+          ? (sections.find((section) => !completedSections.includes(section.id))?.title ?? null)
+          : null,
+      };
+    })
+  );
+
   return NextResponse.json({
     user: {
       id: user.id,
@@ -37,6 +64,7 @@ export async function GET(request: Request) {
       role: user.role,
     },
     courses,
+    allCourses,
     totalProgress,
     totalCompletedSections,
     nextLesson,

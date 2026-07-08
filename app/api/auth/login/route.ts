@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const user = findLoginUser(body.email, body.password);
+  const user = await findLoginUser(body.email, body.password);
 
   if (!user) {
     return NextResponse.json(

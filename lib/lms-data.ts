@@ -287,14 +287,41 @@ const localProgress: Record<string, Record<string, string[]>> = {
   },
 };
 
-export function getDemoUserByEmail(email: string) {
+export async function getDemoUserByEmail(email: string): Promise<DemoUser | null> {
+  if (isKvConfigured && kvClient) {
+    try {
+      const user = await kvClient.get<DemoUser>(`lms:user:email:${email.toLowerCase()}`);
+      if (user) return user;
+    } catch (e) {
+      console.error("Error reading user by email from Vercel KV:", e);
+    }
+  }
   return demoUsers.find(
     (user) => user.email.toLowerCase() === email.toLowerCase(),
-  );
+  ) ?? null;
 }
 
-export function getDemoUserById(userId: string) {
-  return demoUsers.find((user) => user.id === userId);
+export async function getDemoUserById(userId: string): Promise<DemoUser | null> {
+  if (isKvConfigured && kvClient) {
+    try {
+      const user = await kvClient.get<DemoUser>(`lms:user:id:${userId}`);
+      if (user) return user;
+    } catch (e) {
+      console.error("Error reading user by id from Vercel KV:", e);
+    }
+  }
+  return demoUsers.find((user) => user.id === userId) ?? null;
+}
+
+export async function saveDbUser(user: DemoUser): Promise<void> {
+  if (isKvConfigured && kvClient) {
+    try {
+      await kvClient.set(`lms:user:id:${user.id}`, user);
+      await kvClient.set(`lms:user:email:${user.email.toLowerCase()}`, user);
+    } catch (e) {
+      console.error("Error saving user to Vercel KV:", e);
+    }
+  }
 }
 
 export function getCourseById(courseId: string) {
@@ -337,7 +364,7 @@ export async function saveSectionProgress(userId: string, courseId: string, sect
 }
 
 export async function getDashboardCourses(userId: string): Promise<DashboardCourse[]> {
-  const user = getDemoUserById(userId);
+  const user = await getDemoUserById(userId);
 
   if (!user) {
     return [];
@@ -395,4 +422,19 @@ export async function getCourseProgressSummary(userId: string, courseId: string)
     completedSectionIds,
     progressPercent,
   };
+}
+
+export async function resetUserProgress(userId: string, courseId: string): Promise<void> {
+  if (isKvConfigured && kvClient) {
+    try {
+      await kvClient.del(`lms:progress:${userId}:${courseId}`);
+    } catch (e) {
+      console.error("Error deleting progress key from Vercel KV:", e);
+      throw e;
+    }
+  } else {
+    if (localProgress[userId]) {
+      delete localProgress[userId][courseId];
+    }
+  }
 }

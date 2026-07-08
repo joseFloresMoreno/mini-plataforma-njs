@@ -56,12 +56,20 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             <div className="mt-6 rounded-3xl border border-blue-100 bg-blue-50 p-5 text-sm text-blue-800">
               Credenciales de prueba: usa <strong>ana@demo.com</strong> y contraseña <strong>lms123</strong> para ingresar.
             </div>
-            <Link
-              href="/dashboard"
-              className="mt-6 inline-flex h-11 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-5 text-sm font-semibold text-[color:var(--foreground)] transition hover:bg-[var(--surface-soft)]"
-            >
-              Ir al dashboard
-            </Link>
+            <div className="mt-6 flex flex-col gap-3">
+              <Link
+                href="/register"
+                className="inline-flex h-11 items-center justify-center rounded-full bg-blue-600 px-5 text-sm font-semibold !text-white transition hover:bg-blue-500"
+              >
+                Crear nueva cuenta
+              </Link>
+              <Link
+                href="/dashboard"
+                className="inline-flex h-11 items-center justify-center rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-5 text-sm font-semibold text-[color:var(--foreground)] transition hover:bg-[var(--surface-soft)]"
+              >
+                Ir al dashboard
+              </Link>
+            </div>
           </aside>
         </div>
       </main>

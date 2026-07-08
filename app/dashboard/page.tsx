@@ -14,6 +14,7 @@ type DashboardData = {
     role: string;
   };
   courses: DashboardCourse[];
+  allCourses: (DashboardCourse & { isEnrolled: boolean })[];
   totalProgress: number;
   totalCompletedSections: number;
   nextLesson: string;
@@ -24,6 +25,21 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DashboardData | null>(null);
 
+  const fetchDashboardData = (userId: string) => {
+    fetch(`/api/dashboard-data?userId=${userId}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load");
+        return res.json();
+      })
+      .then((payload) => {
+        setData(payload);
+        setLoading(false);
+      })
+      .catch(() => {
+        router.replace("/login");
+      });
+  };
+
   useEffect(() => {
     try {
       const storedUser = localStorage.getItem("lms_user");
@@ -33,18 +49,7 @@ export default function DashboardPage() {
       }
 
       const parsedUser = JSON.parse(storedUser);
-      fetch(`/api/dashboard-data?userId=${parsedUser.id}`)
-        .then((res) => {
-          if (!res.ok) throw new Error("Failed to load");
-          return res.json();
-        })
-        .then((payload) => {
-          setData(payload);
-          setLoading(false);
-        })
-        .catch(() => {
-          router.replace("/login");
-        });
+      fetchDashboardData(parsedUser.id);
     } catch {
       router.replace("/login");
     }
@@ -120,20 +125,25 @@ export default function DashboardPage() {
             <div>
               <div className="mb-6">
                 <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-700">
-                  Catálogo
+                  Catálogo de Cursos Libres
                 </p>
-                <h2 className="mt-2 text-2xl font-semibold text-[color:var(--foreground)]">Retoma donde lo dejaste</h2>
+                <h2 className="mt-2 text-2xl font-semibold text-[color:var(--foreground)]">Explora y Matrícualte Gratis</h2>
               </div>
 
-              {courses.length > 0 ? (
+              {data.allCourses.length > 0 ? (
                 <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                  {courses.map((course) => (
-                    <CourseCard key={course.id} course={course} />
+                  {data.allCourses.map((course) => (
+                    <CourseCard
+                      key={course.id}
+                      course={course}
+                      userId={user.id}
+                      onEnrollSuccess={() => fetchDashboardData(user.id)}
+                    />
                   ))}
                 </div>
               ) : (
                 <div className="rounded-[1.75rem] border border-[color:var(--border)] bg-[var(--surface)] p-8 text-slate-500">
-                  No tienes cursos asignados todavía.
+                  No hay cursos disponibles en el catálogo todavía.
                 </div>
               )}
             </div>
