@@ -32,7 +32,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               Inicia sesión para ver tus cursos, tu avance y la siguiente actividad.
             </h1>
             <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
-              Sesión con JWT en cookie HTTP-only y rutas privadas protegidas por middleware.
+              Accede a tus contenidos, realiza un seguimiento de tu avance y continúa tu aprendizaje.
             </p>
 
             <LoginForm redirectTo={redirectTo} />
@@ -47,14 +47,14 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
                 Primero aterrizas en tu dashboard de cursos con resumen de interacciones.
               </p>
               <p>
-                Cada curso abre un visor con sidebar tipo TODO y navegación al final del contenido.
+                Cada curso abre un visor con sidebar interactivo y navegación al final del contenido.
               </p>
               <p>
-                El switch superior te deja alternar al modo oscuro sin perder la sesión.
+                El switch superior te deja alternar al modo oscuro en cualquier momento.
               </p>
             </div>
-            <div className="mt-6 rounded-3xl border border-blue-100 bg-blue-50 p-5 text-sm text-blue-900">
-              Tip: usa la cuenta de demo para entrar rápido y revisar el flujo completo.
+            <div className="mt-6 rounded-3xl border border-blue-100 bg-blue-50 p-5 text-sm text-blue-800">
+              Credenciales de prueba: usa <strong>ana@demo.com</strong> y contraseña <strong>lms123</strong> para ingresar.
             </div>
             <Link
               href="/dashboard"

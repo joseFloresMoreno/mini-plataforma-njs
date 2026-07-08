@@ -24,7 +24,7 @@ export async function SiteHeader({ brand, subtitle, actions = [] }: SiteHeaderPr
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4 sm:px-10 lg:px-12">
         <div className="flex min-w-0 items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-600 text-sm font-bold text-white shadow-sm shadow-blue-600/25">
-            AZ
+            MP
           </div>
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-[color:var(--foreground)]">{brand}</p>

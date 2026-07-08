@@ -22,14 +22,14 @@ export default function Home() {
         <section className="mx-auto grid min-h-[calc(100vh-7rem)] w-full max-w-7xl gap-6 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="space-y-6 rounded-[2rem] border border-[color:var(--border)] bg-[var(--surface)] p-6 shadow-sm sm:p-8 lg:p-10">
             <div className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700">
-              LMS listo para Vercel
+              Plataforma de Cursos
             </div>
             <div className="space-y-4">
               <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-5xl lg:text-6xl">
                 Una base LMS clara, ligera y enfocada en cursos, progreso y continuidad.
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-slate-600">
-                Autenticación segura, dashboard como primera vista del usuario, visor de contenido con sidebar tipo TODO y una estructura pensada para crecer sin pelear con el despliegue.
+                Visualiza tu progreso, completa lecciones estructuradas paso a paso y realiza las evaluaciones correspondientes para certificar tus conocimientos.
               </p>
             </div>
             <div className="flex flex-col gap-4 sm:flex-row">
@@ -81,8 +81,8 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <div className="rounded-3xl border border-blue-100 bg-blue-50 p-5 text-sm leading-7 text-blue-900">
-              El modo claro es el predeterminado. Usa el switch en la esquina superior para alternar a oscuro.
+            <div className="rounded-3xl border border-blue-100 bg-blue-50 p-5 text-sm leading-7 text-blue-800">
+              Aprende de forma interactiva con evaluaciones integradas en cada curso y realiza un seguimiento automático de tu progreso.
             </div>
           </aside>
         </section>

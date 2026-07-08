@@ -160,7 +160,7 @@ export function CourseViewer({
                       }}
                       className={`flex w-full items-center justify-between rounded-2xl border px-3 py-3 text-left text-sm transition ${
                         active
-                          ? "border-blue-200 bg-blue-50 text-blue-900"
+                          ? "border-blue-600 bg-blue-600 text-white font-medium"
                           : locked
                             ? "border-dashed border-[color:var(--border)] bg-[var(--surface-soft)] text-slate-400"
                             : "border-[color:var(--border)] bg-[var(--surface)] text-[color:var(--foreground)] hover:border-blue-200 hover:bg-[var(--surface-soft)]"
@@ -172,7 +172,7 @@ export function CourseViewer({
                             completed
                               ? "border-green-200 bg-green-50 text-green-700"
                               : active
-                                ? "border-blue-200 bg-blue-600 text-white"
+                                ? "border-white bg-white text-blue-600"
                                   : "border-[color:var(--border)] bg-[var(--surface)] text-slate-400"
                           }`}
                         >

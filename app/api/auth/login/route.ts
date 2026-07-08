@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { findLoginUser, pickSessionUser, signSessionToken, SESSION_COOKIE } from "@/lib/auth";
 
 type LoginBody = {
@@ -26,9 +27,9 @@ export async function POST(request: Request) {
   }
 
   const token = await signSessionToken(user);
-  const response = NextResponse.json({ user: pickSessionUser(user) });
+  const cookieStore = await cookies();
 
-  response.cookies.set(SESSION_COOKIE, token, {
+  cookieStore.set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
@@ -36,5 +37,5 @@ export async function POST(request: Request) {
     maxAge: 60 * 60 * 24 * 7,
   });
 
-  return response;
+  return NextResponse.json({ user: pickSessionUser(user) });
 }

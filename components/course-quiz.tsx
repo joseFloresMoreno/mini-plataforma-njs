@@ -70,7 +70,7 @@ export function CourseQuiz({ questions, onPass }: CourseQuizProps) {
                     onClick={() => handleSelect(q.id, optIdx)}
                     className={`px-4 py-3 text-left text-sm rounded-2xl border transition ${
                       isSelected
-                        ? "border-blue-500 bg-blue-50 text-blue-900 font-medium"
+                        ? "border-blue-600 bg-blue-600 text-white font-medium"
                         : "border-[color:var(--border)] bg-[var(--surface)] text-[color:var(--foreground)] hover:border-slate-300 hover:bg-[var(--surface-soft)]"
                     }`}
                     disabled={isPassed}

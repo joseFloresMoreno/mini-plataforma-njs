@@ -76,7 +76,7 @@ export default async function DashboardPage() {
               </div>
               <div className="rounded-3xl border border-[color:var(--border)] bg-[var(--surface)] p-5">
                 <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Sesión</p>
-                <p className="mt-2 text-3xl font-semibold text-[color:var(--foreground)]">JWT</p>
+                <p className="mt-2 text-3xl font-semibold text-green-600">Activa</p>
               </div>
             </div>
           </div>

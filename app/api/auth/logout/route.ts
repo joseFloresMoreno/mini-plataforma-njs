@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { SESSION_COOKIE } from "@/lib/auth";
 
-function buildLogoutResponse(request: Request) {
-  const response = NextResponse.redirect(new URL("/", request.url));
-
-  response.cookies.set(SESSION_COOKIE, "", {
+async function buildLogoutResponse(request: Request) {
+  const cookieStore = await cookies();
+  cookieStore.set(SESSION_COOKIE, "", {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
@@ -12,13 +12,13 @@ function buildLogoutResponse(request: Request) {
     maxAge: 0,
   });
 
-  return response;
+  return NextResponse.redirect(new URL("/", request.url));
 }
 
 export async function GET(request: Request) {
-  return buildLogoutResponse(request);
+  return await buildLogoutResponse(request);
 }
 
 export async function POST(request: Request) {
-  return buildLogoutResponse(request);
+  return await buildLogoutResponse(request);
 }
