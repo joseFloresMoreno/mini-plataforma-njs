@@ -26,7 +26,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
     redirect("/dashboard");
   }
 
-  const summary = getCourseProgressSummary(user.id, courseId);
+  const summary = await getCourseProgressSummary(user.id, courseId);
 
   if (!summary) {
     notFound();
@@ -77,6 +77,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
 
           <CourseViewer
             course={course}
+            userId={user.id}
             initialCompletedSectionIds={summary.completedSectionIds}
             initialActiveSectionId={initialActiveSection.id}
           />

@@ -1,4 +1,13 @@
+import { kv } from "@vercel/kv";
+
 export type DemoRole = "student" | "admin";
+
+export type QuizQuestion = {
+  id: string;
+  question: string;
+  options: string[];
+  correctOptionIndex: number;
+};
 
 export type CourseSection = {
   id: string;
@@ -7,6 +16,7 @@ export type CourseSection = {
   html: string;
   videoUrl: string;
   durationMinutes: number;
+  quiz?: QuizQuestion[];
 };
 
 export type CourseModule = {
@@ -54,7 +64,7 @@ export const demoUsers: DemoUser[] = [
     email: "ana@demo.com",
     password: "lms123",
     role: "student",
-    enrolledCourseIds: ["next-edu", "react-base"],
+    enrolledCourseIds: ["sopaipillas", "suculentas"],
   },
   {
     id: "user-carlos",
@@ -62,50 +72,134 @@ export const demoUsers: DemoUser[] = [
     email: "carlos@demo.com",
     password: "lms123",
     role: "student",
-    enrolledCourseIds: ["next-edu"],
+    enrolledCourseIds: ["sopaipillas"],
   },
 ];
 
 export const demoCourses: Course[] = [
   {
-    id: "next-edu",
-    slug: "nextjs-para-lms",
-    title: "Next.js para plataformas educativas",
+    id: "sopaipillas",
+    slug: "instrucciones-sopaipillas",
+    title: "Instrucciones para hacer Sopaipillas",
     description:
-      "Construye una experiencia de aprendizaje con rutas protegidas, progreso y panel de usuario.",
+      "Aprende la receta tradicional chilena para preparar las sopaipillas perfectas paso a paso.",
     overview:
-      "Este curso muestra la arquitectura base del LMS: welcome, login, dashboard, visor y navegación bloqueada por avance.",
-    level: "Intermedio",
-    duration: "4h 30m",
-    instructor: "Equipo LMS",
-    accent: "from-cyan-400 to-sky-600",
+      "Este curso cubre todo el proceso: desde la selección de ingredientes, el zapallo ideal, el amasado correcto y los secretos para una fritura perfecta.",
+    level: "Básico",
+    duration: "1h 30m",
+    instructor: "Chef Tradicional",
+    accent: "from-amber-400 to-orange-600",
     modules: [
       {
-        id: "next-m1",
-        title: "Fundamentos de la experiencia",
-        description: "Estructura inicial y navegación base.",
+        id: "sop-m1",
+        title: "Preparación de la Masa",
+        description: "Ingredientes y técnicas de amasado.",
         sections: [
           {
-            id: "next-m1-s1",
-            title: "Arquitectura del LMS",
-            summary: "Qué piezas debe tener una plataforma educativa moderna.",
+            id: "sop-m1-s1",
+            title: "Ingredientes Básicos",
+            summary: "Los componentes esenciales de la masa.",
             html: `
-              <p>La plataforma se organiza en rutas públicas y privadas, con un layout consistente, componentes reutilizables y datos normalizados.</p>
+              <p>Las sopaipillas chilenas tradicionales se distinguen por el uso de zapallo cocido en la masa.</p>
               <ul>
-                <li>Landing page con propuesta de valor</li>
-                <li>Login con cookie HTTP-only</li>
-                <li>Dashboard con cursos matriculados</li>
+                <li>2 tazas de harina sin polvos de hornear.</li>
+                <li>1 taza de zapallo molido cocido (tibio).</li>
+                <li>3 cucharadas de manteca derretida.</li>
+                <li>1 cucharadita de sal.</li>
               </ul>
             `,
             videoUrl: videoPlaceholder,
-            durationMinutes: 8,
+            durationMinutes: 10,
           },
           {
-            id: "next-m1-s2",
-            title: "Rutas y layouts",
-            summary: "Cómo organizar el App Router para el flujo del usuario.",
+            id: "sop-m1-s2",
+            title: "Amasado y Estirado",
+            summary: "Cómo lograr la consistencia ideal y cortar las sopaipillas.",
             html: `
-              <p>El flujo recomendado separa la bienvenida, autenticación, panel y visor de curso, manteniendo cada responsabilidad en una ruta clara.</p>
+              <p>Junta los ingredientes secos, haz un pozo en el centro y agrega el zapallo molido junto con la manteca derretida tibia. Amasa hasta lograr una masa suave y homogénea.</p>
+            `,
+            videoUrl: videoPlaceholder,
+            durationMinutes: 15,
+          },
+        ],
+      },
+      {
+        id: "sop-m2",
+        title: "Fritura y Evaluación",
+        description: "El proceso final y evaluación del aprendizaje.",
+        sections: [
+          {
+            id: "sop-m2-s1",
+            title: "El Arte de Freír",
+            summary: "Temperatura y tiempos para que queden crujientes y doradas.",
+            html: `
+              <p>Fríe las sopaipillas en abundante aceite bien caliente (a unos 175°C) por unos 2 a 3 minutos por lado, hasta que estén doradas. Escurre en papel absorbente antes de servir.</p>
+            `,
+            videoUrl: videoPlaceholder,
+            durationMinutes: 10,
+          },
+          {
+            id: "sop-m2-s2",
+            title: "Cuestionario de Certificación",
+            summary: "Responde las preguntas finales para completar y cerrar el curso.",
+            html: `
+              <p>Responde correctamente todas las preguntas para desbloquear la finalización de este curso.</p>
+            `,
+            videoUrl: videoPlaceholder,
+            durationMinutes: 15,
+            quiz: [
+              {
+                id: "sop-q1",
+                question: "¿Cuál es el ingrediente estrella que le da el color amarillo característico a la sopaipilla chilena?",
+                options: ["Papas", "Zapallo camote", "Zanahoria", "Maíz"],
+                correctOptionIndex: 1,
+              },
+              {
+                id: "sop-q2",
+                question: "¿A qué temperatura aproximada debe estar el aceite para freír las sopaipillas?",
+                options: ["100°C", "175°C", "300°C", "50°C"],
+                correctOptionIndex: 1,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "suculentas",
+    slug: "cuidados-suculentas",
+    title: "Cuidados generales para suculentas en casa",
+    description:
+      "Guía práctica para mantener tus suculentas sanas, fuertes y hermosas en interiores o terrazas.",
+    overview:
+      "Aprende sobre la iluminación necesaria, la técnica correcta de riego para evitar la pudrición, y cómo preparar el sustrato drenante ideal.",
+    level: "Básico",
+    duration: "2h 00m",
+    instructor: "Especialista en Botánica",
+    accent: "from-emerald-400 to-teal-600",
+    modules: [
+      {
+        id: "suc-m1",
+        title: "Luz y Riego",
+        description: "Los dos pilares fundamentales del cuidado.",
+        sections: [
+          {
+            id: "suc-m1-s1",
+            title: "Requisitos de Iluminación",
+            summary: "Cuánta luz necesitan y cómo detectar la falta de sol.",
+            html: `
+              <p>Las suculentas aman la luz solar. Requieren de 4 a 6 horas de sol diario filtrado o directo suave para evitar la etiolación (cuando se estiran buscando luz).</p>
+            `,
+            videoUrl: videoPlaceholder,
+            durationMinutes: 10,
+          },
+          {
+            id: "suc-m1-s2",
+            title: "Método de Riego",
+            summary: "El secreto del riego: remojo y secado.",
+            html: `
+              <p>El error número uno es el riego excesivo. Riega de forma abundante hasta que el agua salga por el drenaje, y no vuelvas a regar hasta que la tierra esté 100% seca.</p>
             `,
             videoUrl: videoPlaceholder,
             durationMinutes: 10,
@@ -113,71 +207,53 @@ export const demoCourses: Course[] = [
         ],
       },
       {
-        id: "next-m2",
-        title: "Interacción y progreso",
-        description: "Bloqueo lateral, avance y seguimiento.",
+        id: "suc-m2",
+        title: "Sustrato y Evaluación",
+        description: "Preparación de la maceta y prueba final.",
         sections: [
           {
-            id: "next-m2-s1",
-            title: "Menú lateral bloqueado",
-            summary: "Solo se habilita cuando la sección previa termina.",
+            id: "suc-m2-s1",
+            title: "Tierra y Drenaje",
+            summary: "Preparando el hogar perfecto para tu suculenta.",
             html: `
-              <p>El sidebar del curso debe impedir saltos arbitrarios y mostrar con claridad qué contenido ya fue desbloqueado.</p>
+              <p>Usa un sustrato especial para cactus y suculentas que contenga arena gruesa, perlita y turba. La maceta SIEMPRE debe tener agujero de drenaje en la base.</p>
             `,
             videoUrl: videoPlaceholder,
-            durationMinutes: 12,
+            durationMinutes: 15,
           },
           {
-            id: "next-m2-s2",
-            title: "Botones siguiente y atrás",
-            summary: "Navegación guiada por el progreso actual.",
+            id: "suc-m2-s2",
+            title: "Evaluación del Jardinero",
+            summary: "Demuestra tus conocimientos para finalizar el curso.",
             html: `
-              <p>Los botones deben adaptarse al estado actual del alumno y actualizar el contenido central sin perder contexto.</p>
+              <p>Responde correctamente todas las preguntas para desbloquear la finalización de este curso.</p>
             `,
             videoUrl: videoPlaceholder,
-            durationMinutes: 12,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "react-base",
-    slug: "fundamentos-react",
-    title: "Fundamentos de React para LMS",
-    description:
-      "Componentización, estado y composición aplicada a cursos y dashboards.",
-    overview:
-      "Ideal para construir cards, formularios y un visor interactivo con componentes pequeños y reutilizables.",
-    level: "Básico",
-    duration: "3h 20m",
-    instructor: "Team Frontend",
-    accent: "from-emerald-400 to-teal-600",
-    modules: [
-      {
-        id: "react-m1",
-        title: "Componentes y composición",
-        description: "Cómo descomponer la interfaz en piezas reutilizables.",
-        sections: [
-          {
-            id: "react-m1-s1",
-            title: "Cards de curso",
-            summary: "Presentación de cursos matriculados con progreso.",
-            html: `
-              <p>Las cards ayudan a mostrar rápidamente el estado del usuario y a dirigirlo al siguiente paso del recorrido de aprendizaje.</p>
-            `,
-            videoUrl: videoPlaceholder,
-            durationMinutes: 7,
-          },
-          {
-            id: "react-m1-s2",
-            title: "Estado y acciones",
-            summary: "Navegación, selección y persistencia del progreso.",
-            html: `
-              <p>La interacción del alumno se traduce en estado local o persistencia en base de datos según el punto del producto.</p>
-            `,
-            videoUrl: videoPlaceholder,
-            durationMinutes: 9,
+            durationMinutes: 15,
+            quiz: [
+              {
+                id: "suc-q1",
+                question: "¿Con qué frecuencia se deben regar las suculentas por lo general?",
+                options: [
+                  "Todos los días",
+                  "Solo cuando el sustrato esté completamente seco",
+                  "Una vez al año",
+                  "Cada dos horas",
+                ],
+                correctOptionIndex: 1,
+              },
+              {
+                id: "suc-q2",
+                question: "¿Qué es fundamental que tenga la maceta de una suculenta?",
+                options: [
+                  "Pintura brillante",
+                  "Orificio de drenaje",
+                  "Color rojo",
+                  "Tapa hermética",
+                ],
+                correctOptionIndex: 1,
+              },
+            ],
           },
         ],
       },
@@ -185,13 +261,20 @@ export const demoCourses: Course[] = [
   },
 ];
 
-export const demoProgress: Record<string, Record<string, string[]>> = {
+const isKvConfigured = !!(
+  process.env.KV_URL ||
+  process.env.KV_REST_API_URL ||
+  process.env.KV_REST_API_TOKEN
+);
+
+// Fallback in-memory progress for local development or when KV is not set up
+const localProgress: Record<string, Record<string, string[]>> = {
   "user-ana": {
-    "next-edu": ["next-m1-s1", "next-m1-s2"],
-    "react-base": ["react-m1-s1"],
+    "sopaipillas": ["sop-m1-s1", "sop-m1-s2"],
+    "suculentas": ["suc-m1-s1"],
   },
   "user-carlos": {
-    "next-edu": ["next-m1-s1"],
+    "sopaipillas": ["sop-m1-s1"],
   },
 };
 
@@ -213,56 +296,84 @@ export function flattenCourseSections(course: Course) {
   return course.modules.flatMap((module) => module.sections);
 }
 
-export function getUserCompletedSectionIds(userId: string, courseId: string) {
-  return demoProgress[userId]?.[courseId] ?? [];
+export async function getUserCompletedSectionIds(userId: string, courseId: string): Promise<string[]> {
+  if (isKvConfigured) {
+    try {
+      const progress = await kv.get<string[]>(`lms:progress:${userId}:${courseId}`);
+      return progress ?? [];
+    } catch (e) {
+      console.error("Error reading from Vercel KV:", e);
+    }
+  }
+  return localProgress[userId]?.[courseId] ?? [];
 }
 
-export function getDashboardCourses(userId: string): DashboardCourse[] {
+export async function saveSectionProgress(userId: string, courseId: string, sectionId: string): Promise<string[]> {
+  const current = await getUserCompletedSectionIds(userId, courseId);
+  const updated = current.includes(sectionId) ? current : [...current, sectionId];
+  
+  if (isKvConfigured) {
+    try {
+      await kv.set(`lms:progress:${userId}:${courseId}`, updated);
+    } catch (e) {
+      console.error("Error writing to Vercel KV:", e);
+    }
+  } else {
+    if (!localProgress[userId]) {
+      localProgress[userId] = {};
+    }
+    localProgress[userId][courseId] = updated;
+  }
+  return updated;
+}
+
+export async function getDashboardCourses(userId: string): Promise<DashboardCourse[]> {
   const user = getDemoUserById(userId);
 
   if (!user) {
     return [];
   }
 
-  return user.enrolledCourseIds
-    .map((courseId) => {
-      const course = getCourseById(courseId);
+  const coursePromises = user.enrolledCourseIds.map(async (courseId) => {
+    const course = getCourseById(courseId);
 
-      if (!course) {
-        return null;
-      }
+    if (!course) {
+      return null;
+    }
 
-      const sections = flattenCourseSections(course);
-      const completedSections = getUserCompletedSectionIds(userId, course.id);
-      const completedCount = completedSections.length;
-      const totalSections = sections.length;
-      const progressPercent =
-        totalSections === 0
-          ? 0
-          : Math.round((completedCount / totalSections) * 100);
-      const nextSectionTitle =
-        sections.find((section) => !completedSections.includes(section.id))
-          ?.title ?? null;
+    const sections = flattenCourseSections(course);
+    const completedSections = await getUserCompletedSectionIds(userId, course.id);
+    const completedCount = completedSections.length;
+    const totalSections = sections.length;
+    const progressPercent =
+      totalSections === 0
+        ? 0
+        : Math.round((completedCount / totalSections) * 100);
+    const nextSectionTitle =
+      sections.find((section) => !completedSections.includes(section.id))
+        ?.title ?? null;
 
-      return {
-        ...course,
-        completedSections: completedCount,
-        totalSections,
-        progressPercent,
-        nextSectionTitle,
-      };
-    })
-    .filter((course): course is DashboardCourse => course !== null);
+    return {
+      ...course,
+      completedSections: completedCount,
+      totalSections,
+      progressPercent,
+      nextSectionTitle,
+    };
+  });
+
+  const resolved = await Promise.all(coursePromises);
+  return resolved.filter((course): course is DashboardCourse => course !== null);
 }
 
-export function getCourseProgressSummary(userId: string, courseId: string) {
+export async function getCourseProgressSummary(userId: string, courseId: string) {
   const course = getCourseById(courseId);
 
   if (!course) {
     return null;
   }
 
-  const completedSectionIds = getUserCompletedSectionIds(userId, courseId);
+  const completedSectionIds = await getUserCompletedSectionIds(userId, courseId);
   const sections = flattenCourseSections(course);
   const progressPercent =
     sections.length === 0

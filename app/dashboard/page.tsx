@@ -13,7 +13,7 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const courses = getDashboardCourses(sessionUser.id);
+  const courses = await getDashboardCourses(sessionUser.id);
   const totalProgress =
     courses.length === 0
       ? 0

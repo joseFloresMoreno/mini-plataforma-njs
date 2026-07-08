@@ -3,22 +3,40 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Course } from "@/lib/lms-data";
 import { flattenCourseSections } from "@/lib/lms-data";
+import { CourseQuiz } from "./course-quiz";
+import { useRouter } from "next/navigation";
 
 type CourseViewerProps = {
   course: Course;
+  userId: string;
   initialCompletedSectionIds: string[];
   initialActiveSectionId: string;
 };
 
 export function CourseViewer({
   course,
+  userId,
   initialCompletedSectionIds,
   initialActiveSectionId,
 }: CourseViewerProps) {
+  const router = useRouter();
   const sections = useMemo(() => flattenCourseSections(course), [course]);
   const storageKey = `lms-progress:${course.id}`;
   const [completedSectionIds, setCompletedSectionIds] = useState(initialCompletedSectionIds);
   const [activeSectionId, setActiveSectionId] = useState(initialActiveSectionId);
+
+  const activeSectionIndex = sections.findIndex(
+    (section) => section.id === activeSectionId,
+  );
+  const activeSection = sections[activeSectionIndex] ?? sections[0];
+  const isSectionCompleted = completedSectionIds.includes(activeSection.id);
+  
+  const activeSectionHasQuiz = !!activeSection.quiz && activeSection.quiz.length > 0;
+  const [quizPassed, setQuizPassed] = useState(false);
+
+  useEffect(() => {
+    setQuizPassed(isSectionCompleted);
+  }, [activeSectionId, isSectionCompleted]);
 
   useEffect(() => {
     try {
@@ -31,11 +49,6 @@ export function CourseViewer({
     }
   }, [completedSectionIds, storageKey]);
 
-  const activeSectionIndex = sections.findIndex(
-    (section) => section.id === activeSectionId,
-  );
-  const activeSection = sections[activeSectionIndex] ?? sections[0];
-  const isSectionCompleted = completedSectionIds.includes(activeSection.id);
   const completedPercent =
     sections.length === 0
       ? 0
@@ -49,20 +62,44 @@ export function CourseViewer({
     return completedSectionIds.includes(sections[index - 1]?.id ?? "");
   };
 
-  const markCurrentAsComplete = () => {
+  const markCurrentAsComplete = async () => {
     setCompletedSectionIds((current) =>
       current.includes(activeSection.id)
         ? current
         : [...current, activeSection.id],
     );
+
+    try {
+      await fetch("/api/progress", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          courseId: course.id,
+          sectionId: activeSection.id,
+        }),
+      });
+    } catch (e) {
+      console.error("Failed to save progress to server:", e);
+    }
   };
 
-  const goToNextSection = () => {
-    if (!isSectionCompleted) {
-      markCurrentAsComplete();
-    }
+  const isLastSection = activeSectionIndex === sections.length - 1;
+  const isNextDisabled = activeSectionHasQuiz && !quizPassed;
 
-    if (activeSectionIndex < sections.length - 1) {
+  const handleNextClick = async () => {
+    if (isNextDisabled) return;
+
+    if (isLastSection) {
+      await markCurrentAsComplete();
+      router.push("/dashboard");
+      router.refresh();
+    } else {
+      if (!isSectionCompleted) {
+        await markCurrentAsComplete();
+      }
       const nextSection = sections[activeSectionIndex + 1];
       setActiveSectionId(nextSection.id);
     }
@@ -174,43 +211,30 @@ export function CourseViewer({
 
         <article className="rounded-[1.5rem] border border-[color:var(--border)] bg-[var(--surface)] p-6 sm:p-8">
           <div className="max-w-none space-y-6 text-[15px] leading-8 text-[color:var(--foreground)]">
-            <p>{activeSection.summary}</p>
-            <p>
-              El curso está pensado como una sabana de lectura: el contenido puede crecer sin problema y la navegación permanece abajo para no interrumpir el flujo de estudio.
-            </p>
-            <p>
-              Esta sección forma parte de un recorrido controlado por el progreso. Cuando termines esta parte, el siguiente item del sidebar se desbloquea automáticamente.
-            </p>
-            <div className="rounded-3xl border border-blue-100 bg-blue-50 p-5 text-blue-950">
-              <p className="font-semibold">Punto clave</p>
-              <p className="mt-2">
-                El menú lateral funciona como una lista de tareas pendientes: lo completado se marca, lo siguiente queda visible pero bloqueado, y el contenido central siempre se puede leer con scroll.
-              </p>
-            </div>
-            <p>
-              Si el material se extiende más que la pantalla, el artículo simplemente continúa hacia abajo. La barra lateral no necesita seguir el alto del contenido; solo acompaña de forma visual.
-            </p>
-            <div className="space-y-3 rounded-3xl border border-[color:var(--border)] bg-[var(--surface-soft)] p-5">
-              <p className="text-sm font-semibold text-[color:var(--foreground)]">Referencia visual</p>
-              <p className="text-sm leading-7 text-slate-600">
-                La composición busca un panel principal amplio, un lateral compacto y controlado, y controles de navegación ubicados al final del contenido, no flotando arriba.
-              </p>
-            </div>
             <div className="rounded-3xl border border-[color:var(--border)] bg-[var(--surface-soft)] p-5">
               <div
                 className="prose prose-slate max-w-none prose-p:leading-8 prose-li:leading-8"
                 dangerouslySetInnerHTML={{ __html: activeSection.html }}
               />
             </div>
-            <div className="overflow-hidden rounded-2xl border border-[color:var(--border)] bg-slate-200">
-              <iframe
-                title={activeSection.title}
-                className="aspect-video w-full"
-                src={activeSection.videoUrl}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
+            {activeSection.videoUrl && (
+              <div className="overflow-hidden rounded-2xl border border-[color:var(--border)] bg-slate-200">
+                <iframe
+                  title={activeSection.title}
+                  className="aspect-video w-full"
+                  src={activeSection.videoUrl}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            )}
+
+            {activeSectionHasQuiz && activeSection.quiz && (
+              <CourseQuiz
+                questions={activeSection.quiz}
+                onPass={() => setQuizPassed(true)}
               />
-            </div>
+            )}
           </div>
 
           <div className="mt-8 border-t border-[color:var(--border)] pt-6">
@@ -225,10 +249,19 @@ export function CourseViewer({
               </button>
               <button
                 type="button"
-                onClick={goToNextSection}
-                className="inline-flex h-11 items-center justify-center rounded-full bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-500"
+                onClick={handleNextClick}
+                disabled={isNextDisabled}
+                className={`inline-flex h-11 items-center justify-center rounded-full px-5 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-40 ${
+                  isLastSection 
+                    ? "bg-green-600 hover:bg-green-500" 
+                    : "bg-blue-600 hover:bg-blue-500"
+                }`}
               >
-                {isSectionCompleted ? "Siguiente" : "Marcar completada y seguir"}
+                {isLastSection 
+                  ? "Finalizar y cerrar el curso" 
+                  : isSectionCompleted 
+                    ? "Siguiente" 
+                    : "Marcar completada y seguir"}
               </button>
             </div>
           </div>
