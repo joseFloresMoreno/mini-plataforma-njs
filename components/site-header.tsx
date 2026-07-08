@@ -1,5 +1,7 @@
+"use client";
+
 import Link from "next/link";
-import { cookies } from "next/headers";
+import { useState, useEffect } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 type HeaderAction = {
@@ -14,10 +16,16 @@ type SiteHeaderProps = {
   actions?: HeaderAction[];
 };
 
-export async function SiteHeader({ brand, subtitle, actions = [] }: SiteHeaderProps) {
-  const cookieStore = await cookies();
-  const themeCookie = cookieStore.get("mini-plataforma-theme")?.value;
-  const initialTheme = themeCookie === "dark" ? "dark" : "light";
+export function SiteHeader({ brand, subtitle, actions = [] }: SiteHeaderProps) {
+  const [initialTheme, setInitialTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    const themeCookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("mini-plataforma-theme="))
+      ?.split("=")[1];
+    setInitialTheme(themeCookie === "dark" ? "dark" : "light");
+  }, []);
 
   return (
     <header className="sticky top-0 z-20 border-b border-[color:var(--border)] bg-[var(--surface)] backdrop-blur-xl">

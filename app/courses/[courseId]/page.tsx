@@ -1,9 +1,10 @@
-import { cookies, headers } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+"use client";
+
+import { useEffect, useState, use } from "react";
+import { useRouter } from "next/navigation";
 import { CourseViewer } from "@/components/course-viewer";
 import { SiteHeader } from "@/components/site-header";
-import { SESSION_COOKIE, getSessionUser, getCookieValue } from "@/lib/auth";
-import { getCourseById, getCourseProgressSummary, getDemoUserById } from "@/lib/lms-data";
+import type { Course } from "@/lib/lms-data";
 
 type CoursePageProps = {
   params: Promise<{
@@ -11,80 +12,91 @@ type CoursePageProps = {
   }>;
 };
 
-export default async function CoursePage({ params }: CoursePageProps) {
-  const { courseId } = await params;
-  const cookieStore = await cookies();
-  let token = cookieStore.get(SESSION_COOKIE)?.value;
-  if (!token) {
-    const reqHeaders = await headers();
-    token = getCookieValue(reqHeaders.get("cookie"), SESSION_COOKIE);
+type CoursePageData = {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
+  course: Course;
+  summary: {
+    completedSectionIds: string[];
+    progressPercent: number;
+  };
+};
+
+export default function CoursePage({ params }: CoursePageProps) {
+  const router = useRouter();
+  const { courseId } = use(params);
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<CoursePageData | null>(null);
+
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem("lms_user");
+      if (!storedUser) {
+        router.replace("/login");
+        return;
+      }
+
+      const parsedUser = JSON.parse(storedUser);
+      fetch(`/api/course-data?userId=${parsedUser.id}&courseId=${courseId}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Failed to load");
+          return res.json();
+        })
+        .then((payload) => {
+          setData(payload);
+          setLoading(false);
+        })
+        .catch(() => {
+          router.replace("/dashboard");
+        });
+    } catch {
+      router.replace("/login");
+    }
+  }, [router, courseId]);
+
+  if (loading || !data) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[var(--background)]">
+        <div className="text-center space-y-4">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent mx-auto" />
+          <p className="text-sm text-slate-500 font-semibold">Cargando curso...</p>
+        </div>
+      </div>
+    );
   }
-  const sessionUser = await getSessionUser(token);
 
-  if (!sessionUser) {
-    redirect("/login");
-  }
-
-  const user = getDemoUserById(sessionUser.id);
-
-  if (!user || !user.enrolledCourseIds.includes(courseId)) {
-    redirect("/dashboard");
-  }
-
-  const summary = await getCourseProgressSummary(user.id, courseId);
-
-  if (!summary) {
-    notFound();
-  }
-
-  const course = getCourseById(courseId);
-
-  if (!course) {
-    notFound();
-  }
-
-  const initialActiveSection =
-    summary.sections.find(
-      (section) => !summary.completedSectionIds.includes(section.id),
-    ) ?? summary.sections[summary.sections.length - 1];
+  const { user, course, summary } = data;
 
   return (
     <div>
       <SiteHeader
         brand="Mini-Plataforma"
-        subtitle={course.title}
+        subtitle={`Curso: ${course.title}`}
         actions={[
           { href: "/dashboard", label: "← Volver a cursos" },
           { href: "/api/auth/logout", label: "Cerrar sesión" },
         ]}
       />
       <main className="px-6 py-8 sm:px-10 lg:px-12">
-        <section className="mx-auto w-full max-w-7xl space-y-6">
-          <div className="rounded-[2rem] border border-[color:var(--border)] bg-[var(--surface)] p-6 shadow-sm sm:p-8">
+        <section className="mx-auto w-full max-w-7xl">
+          <div className="mb-6">
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-700">
-              Visor de curso
+              Visor de Curso
             </p>
-            <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-              <div>
-                <h1 className="text-4xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-5xl">
-                  {course.title}
-                </h1>
-                <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-600">
-                  {course.overview}
-                </p>
-              </div>
-              <div className="rounded-3xl border border-[color:var(--border)] bg-[var(--surface)] px-5 py-4 text-sm text-[color:var(--foreground)]">
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Progreso actual</p>
-                <p className="mt-2 text-3xl font-semibold text-[color:var(--foreground)]">{summary.progressPercent}%</p>
-              </div>
-            </div>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-4xl">
+              {course.title}
+            </h1>
           </div>
 
           <CourseViewer
             course={course}
             userId={user.id}
             initialCompletedSectionIds={summary.completedSectionIds}
-            initialActiveSectionId={initialActiveSection.id}
+            initialActiveSectionId={course.modules[0]?.sections[0]?.id || ""}
           />
         </section>
       </main>

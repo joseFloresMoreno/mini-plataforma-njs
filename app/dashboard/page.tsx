@@ -1,43 +1,73 @@
-import { cookies, headers } from "next/headers";
-import { redirect } from "next/navigation";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { CourseCard } from "@/components/course-card";
 import { SiteHeader } from "@/components/site-header";
-import { SESSION_COOKIE, getSessionUser, getCookieValue } from "@/lib/auth";
-import { getDashboardCourses } from "@/lib/lms-data";
+import type { DashboardCourse } from "@/lib/lms-data";
 
-export default async function DashboardPage() {
-  const cookieStore = await cookies();
-  let token = cookieStore.get(SESSION_COOKIE)?.value;
-  if (!token) {
-    const reqHeaders = await headers();
-    token = getCookieValue(reqHeaders.get("cookie"), SESSION_COOKIE);
+type DashboardData = {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
+  courses: DashboardCourse[];
+  totalProgress: number;
+  totalCompletedSections: number;
+  nextLesson: string;
+};
+
+export default function DashboardPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<DashboardData | null>(null);
+
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem("lms_user");
+      if (!storedUser) {
+        router.replace("/login");
+        return;
+      }
+
+      const parsedUser = JSON.parse(storedUser);
+      fetch(`/api/dashboard-data?userId=${parsedUser.id}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Failed to load");
+          return res.json();
+        })
+        .then((payload) => {
+          setData(payload);
+          setLoading(false);
+        })
+        .catch(() => {
+          router.replace("/login");
+        });
+    } catch {
+      router.replace("/login");
+    }
+  }, [router]);
+
+  if (loading || !data) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[var(--background)]">
+        <div className="text-center space-y-4">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent mx-auto" />
+          <p className="text-sm text-slate-500 font-semibold">Cargando dashboard...</p>
+        </div>
+      </div>
+    );
   }
-  const sessionUser = await getSessionUser(token);
 
-  if (!sessionUser) {
-    redirect("/login");
-  }
-
-  const courses = await getDashboardCourses(sessionUser.id);
-  const totalProgress =
-    courses.length === 0
-      ? 0
-      : Math.round(
-          courses.reduce((sum, course) => sum + course.progressPercent, 0) /
-            courses.length,
-        );
-  const totalCompletedSections = courses.reduce(
-    (sum, course) => sum + course.completedSections,
-    0,
-  );
-  const currentCourse = courses[0];
-  const nextLesson = currentCourse?.nextSectionTitle ?? "Sin curso asignado";
+  const { user, courses, totalProgress, totalCompletedSections, nextLesson } = data;
 
   return (
     <div>
       <SiteHeader
         brand="Mini-Plataforma"
-        subtitle={`Bienvenida, ${sessionUser.name}`}
+        subtitle={`Bienvenida, ${user.name}`}
         actions={[
           { href: "/", label: "Inicio" },
           { href: "/api/auth/logout", label: "Cerrar sesión" },
@@ -52,7 +82,7 @@ export default async function DashboardPage() {
                   Mis cursos y actividad
                 </p>
                 <h1 className="mt-4 text-4xl font-semibold tracking-tight text-[color:var(--foreground)] sm:text-5xl">
-                  Hola, {sessionUser.name}
+                  Hola, {user.name}
                 </h1>
                 <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
                   Esta es tu vista principal: cursos matriculados, resumen de interacciones y acceso directo a lo último que dejaste pendiente.
@@ -88,13 +118,11 @@ export default async function DashboardPage() {
 
           <section className="grid gap-6 lg:grid-cols-[1fr_320px]">
             <div>
-              <div className="mb-5 flex items-end justify-between gap-4">
-                <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.28em] text-blue-700">
-                    Tus cursos
-                  </p>
-                  <h2 className="mt-2 text-2xl font-semibold text-[color:var(--foreground)]">Retoma donde lo dejaste</h2>
-                </div>
+              <div className="mb-6">
+                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-700">
+                  Catálogo
+                </p>
+                <h2 className="mt-2 text-2xl font-semibold text-[color:var(--foreground)]">Retoma donde lo dejaste</h2>
               </div>
 
               {courses.length > 0 ? (

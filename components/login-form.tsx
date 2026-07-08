@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { demoUsers } from "@/lib/lms-data";
 
@@ -24,6 +24,14 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  useEffect(() => {
+    try {
+      localStorage.removeItem("lms_user");
+    } catch (e) {
+      // Ignore in SSR
+    }
+  }, []);
+
   const submitLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
@@ -39,7 +47,7 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
       });
 
       const payload = (await response.json().catch(() => null)) as
-        | { error?: string; token?: string }
+        | { error?: string; token?: string; user?: any }
         | null;
 
       if (!response.ok) {
@@ -49,6 +57,10 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
       if (payload?.token) {
         const isSecure = typeof window !== "undefined" && window.location.protocol === "https:";
         document.cookie = `lms_session=${payload.token}; path=/; max-age=${60 * 60 * 24 * 7}; ${isSecure ? "secure;" : ""} samesite=lax`;
+      }
+
+      if (payload?.user) {
+        localStorage.setItem("lms_user", JSON.stringify(payload.user));
       }
 
       router.replace(redirectTo);
