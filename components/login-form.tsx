@@ -104,13 +104,13 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
               key={user.id}
               type="button"
               onClick={() => setForm({ email: user.email, password: user.password })}
-              className="flex w-full items-center justify-between rounded-3xl border border-[color:var(--border)] bg-[var(--surface)] px-4 py-4 text-left transition hover:border-blue-200 hover:bg-[var(--surface-soft)]"
+              className="flex w-full items-center justify-between rounded-3xl border border-[color:var(--border)] bg-[var(--surface)] px-4 py-4 text-left transition hover:border-blue-400 hover:bg-[var(--surface-soft)]"
             >
               <div>
                 <p className="font-semibold text-[color:var(--foreground)]">{user.name}</p>
-                <p className="mt-1 text-sm text-slate-500">{user.email}</p>
+                <p className="mt-1 text-sm text-slate-700">{user.email}</p>
               </div>
-              <span className="rounded-full border border-[color:var(--border)] bg-[var(--surface-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">
+              <span className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.24em] text-blue-800">
                 Demo
               </span>
             </button>

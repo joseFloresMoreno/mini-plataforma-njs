@@ -35,19 +35,24 @@ export async function SiteHeader({ brand, subtitle, actions = [] }: SiteHeaderPr
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          {actions.map((action) => (
-            <Link
-              key={action.href}
-              href={action.href}
-              className={
-                action.variant === "primary"
-                  ? "inline-flex h-10 items-center rounded-full bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-500"
-                  : "inline-flex h-10 items-center rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-4 text-sm font-semibold text-[color:var(--foreground)] transition hover:bg-[var(--surface-soft)]"
-              }
-            >
-              {action.label}
-            </Link>
-          ))}
+          {actions.map((action) => {
+            const isLogout = action.href === "/api/auth/logout";
+            return (
+              <Link
+                key={action.href}
+                href={action.href}
+                className={
+                  isLogout
+                    ? "inline-flex h-10 items-center rounded-full border border-red-200 bg-[var(--surface)] px-4 text-sm font-semibold text-red-600 transition hover:bg-red-50 hover:border-red-300"
+                    : action.variant === "primary"
+                      ? "inline-flex h-10 items-center rounded-full bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-500"
+                      : "inline-flex h-10 items-center rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-4 text-sm font-semibold text-[color:var(--foreground)] transition hover:bg-[var(--surface-soft)]"
+                }
+              >
+                {action.label}
+              </Link>
+            );
+          })}
           <ThemeToggle initialTheme={initialTheme} />
         </div>
       </div>
