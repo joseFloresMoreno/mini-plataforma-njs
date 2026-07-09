@@ -74,6 +74,14 @@ export const demoUsers: DemoUser[] = [
     role: "student",
     enrolledCourseIds: ["sopaipillas"],
   },
+  {
+    id: "user-admin",
+    name: "Administrador",
+    email: "admin@demo.com",
+    password: "admin123",
+    role: "admin",
+    enrolledCourseIds: ["sopaipillas", "suculentas"],
+  },
 ];
 
 export const demoCourses: Course[] = [
