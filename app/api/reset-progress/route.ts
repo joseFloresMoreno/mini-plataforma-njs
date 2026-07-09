@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDemoUserById, resetUserProgress } from "@/lib/lms-data";
+import { getDemoUserById, resetUserProgress, getAllUsers } from "@/lib/lms-data";
 
 type ResetBody = {
   userId?: string;
@@ -26,7 +26,14 @@ export async function POST(request: Request) {
   }
 
   try {
-    await resetUserProgress(body.userId, body.courseId);
+    if (body.userId === "all") {
+      const allUsers = await getAllUsers();
+      await Promise.all(
+        allUsers.map((user) => resetUserProgress(user.id, body.courseId!))
+      );
+    } else {
+      await resetUserProgress(body.userId, body.courseId);
+    }
   } catch (e) {
     return NextResponse.json({ error: "Error al borrar en la base de datos." }, { status: 500 });
   }

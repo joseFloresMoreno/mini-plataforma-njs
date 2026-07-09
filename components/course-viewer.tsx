@@ -50,7 +50,7 @@ export function CourseViewer({
   }, []);
 
   const handleResetProgress = async () => {
-    if (!window.confirm("¿Seguro que deseas reiniciar el progreso de este curso?")) {
+    if (!window.confirm("¿Seguro que deseas reiniciar el progreso de este curso para TODOS los alumnos en el sistema?")) {
       return;
     }
     setIsResetting(true);
@@ -63,7 +63,7 @@ export function CourseViewer({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId,
+          userId: "all",
           courseId: course.id,
           adminId: parsed.id,
         }),
@@ -247,7 +247,7 @@ export function CourseViewer({
                 disabled={isResetting}
                 className="inline-flex h-10 w-full items-center justify-center rounded-full border border-red-200 bg-red-50 px-4 text-xs font-semibold text-red-600 transition hover:bg-red-100 hover:border-red-300 disabled:opacity-50"
               >
-                {isResetting ? "Reiniciando..." : "Reiniciar Avance (Admin)"}
+                {isResetting ? "Reiniciando..." : "Reiniciar Curso (Todos)"}
               </button>
             </div>
           )}

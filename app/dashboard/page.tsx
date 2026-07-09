@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CourseCard } from "@/components/course-card";
 import { SiteHeader } from "@/components/site-header";
+import { AdminDashboard } from "@/components/admin-dashboard";
 import type { DashboardCourse } from "@/lib/lms-data";
 
 type DashboardData = {
@@ -67,6 +68,26 @@ export default function DashboardPage() {
   }
 
   const { user, courses, totalProgress, totalCompletedSections, nextLesson } = data;
+
+  if (user.role === "admin") {
+    return (
+      <div>
+        <SiteHeader
+          brand="Mini-Plataforma"
+          subtitle={`Panel de Administración: ${user.name}`}
+          actions={[
+            { href: "/", label: "Inicio" },
+            { href: "/api/auth/logout", label: "Cerrar sesión" },
+          ]}
+        />
+        <main className="px-6 py-8 sm:px-10 lg:px-12">
+          <div className="mx-auto w-full max-w-7xl">
+            <AdminDashboard adminId={user.id} />
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div>

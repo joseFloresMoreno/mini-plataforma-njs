@@ -326,10 +326,41 @@ export async function saveDbUser(user: DemoUser): Promise<void> {
     try {
       await kvClient.set(`lms:user:id:${user.id}`, user);
       await kvClient.set(`lms:user:email:${user.email.toLowerCase()}`, user);
+      
+      const list = await kvClient.get<DemoUser[]>("lms:users:list") || [];
+      const index = list.findIndex((u) => u.id === user.id);
+      if (index !== -1) {
+        list[index] = user;
+      } else {
+        list.push(user);
+      }
+      await kvClient.set("lms:users:list", list);
     } catch (e) {
       console.error("Error saving user to Vercel KV:", e);
     }
   }
+}
+
+export async function getAllUsers(): Promise<DemoUser[]> {
+  let dynamicUsers: DemoUser[] = [];
+  if (isKvConfigured && kvClient) {
+    try {
+      const list = await kvClient.get<DemoUser[]>("lms:users:list");
+      if (list && Array.isArray(list)) {
+        dynamicUsers = list;
+      }
+    } catch (e) {
+      console.error("Error reading users list from KV:", e);
+    }
+  }
+  
+  const all = [...demoUsers];
+  for (const user of dynamicUsers) {
+    if (!all.some((u) => u.id === user.id || u.email.toLowerCase() === user.email.toLowerCase())) {
+      all.push(user);
+    }
+  }
+  return all;
 }
 
 export function getCourseById(courseId: string) {
