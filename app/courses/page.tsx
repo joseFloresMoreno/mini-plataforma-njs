@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
-import { demoCourses } from "@/lib/lms-data";
 import Link from "next/link";
 
 type UserState = {
@@ -14,13 +13,24 @@ type UserState = {
   enrolledCourseIds: string[];
 };
 
+type CatalogCourse = {
+  id: string;
+  title: string;
+  description: string;
+  level: string;
+  duration: string;
+  instructor: string;
+};
+
 export default function CoursesPage() {
   const router = useRouter();
   const [user, setUser] = useState<UserState | null>(null);
+  const [courses, setCourses] = useState<CatalogCourse[]>([]);
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState<string | null>(null); // courseId
 
   useEffect(() => {
+    // Load active user session
     try {
       const stored = localStorage.getItem("lms_user");
       if (stored) {
@@ -28,9 +38,24 @@ export default function CoursesPage() {
       }
     } catch {
       // Ignore
-    } finally {
-      setLoading(false);
     }
+
+    // Fetch courses list from the safe API route
+    fetch("/api/courses")
+      .then((res) => {
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
+      .then((data) => {
+        setCourses(data.courses || []);
+      })
+      .catch(() => {
+        // Fallback placeholder courses if API fails
+        setCourses([]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const handleEnroll = async (courseId: string) => {
@@ -66,6 +91,17 @@ export default function CoursesPage() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[var(--background)]">
+        <div className="text-center space-y-4">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent mx-auto" />
+          <p className="text-sm text-slate-500 font-semibold">Cargando catálogo...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <SiteHeader
@@ -98,7 +134,7 @@ export default function CoursesPage() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
-            {demoCourses.map((course) => {
+            {courses.map((course) => {
               const isEnrolled = user?.enrolledCourseIds.includes(course.id) || false;
               const isAdmin = user?.role === "admin" || false;
 
