@@ -108,13 +108,25 @@ export const demoCourses: Course[] = [
             title: "Ingredientes Básicos",
             summary: "Los componentes esenciales de la masa.",
             html: `
-              <p>Las sopaipillas chilenas tradicionales se distinguen por el uso de zapallo cocido en la masa.</p>
-              <ul>
-                <li>2 tazas de harina sin polvos de hornear.</li>
-                <li>1 taza de zapallo molido cocido (tibio).</li>
-                <li>3 cucharadas de manteca derretida.</li>
-                <li>1 cucharadita de sal.</li>
-              </ul>
+              <p>Las sopaipillas chilenas tradicionales se distinguen por el uso de zapallo cocido en la masa, el cual le aporta suavidad, color y un sabor único.</p>
+              
+              <div class="lms-card-info">
+                <div>
+                  <strong>Ingredientes Principales:</strong>
+                  <ul style="list-style-type: disc; padding-left: 1.25rem; margin-top: 0.5rem;">
+                    <li>2 tazas de harina sin polvos de hornear.</li>
+                    <li>1 taza de zapallo molido cocido (tibio).</li>
+                    <li>3 cucharadas de manteca derretida.</li>
+                    <li>1 cucharadita de sal.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="lms-card-tip">
+                <div>
+                  <strong>Consejo de Cocina:</strong> Asegúrate de que el zapallo esté bien molido y tibio al momento de mezclar para lograr una integración homogénea perfecta.
+                </div>
+              </div>
             `,
             videoUrl: videoPlaceholder,
             durationMinutes: 10,
@@ -124,7 +136,14 @@ export const demoCourses: Course[] = [
             title: "Amasado y Estirado",
             summary: "Cómo lograr la consistencia ideal y cortar las sopaipillas.",
             html: `
-              <p>Junta los ingredientes secos, haz un pozo en el centro y agrega el zapallo molido junto con la manteca derretida tibia. Amasa hasta lograr una masa suave y homogénea.</p>
+              <p>El amasado es el paso crítico para activar el gluten en la cantidad justa y lograr que la sopaipilla no quede dura ni chiclosa.</p>
+              
+              <ol class="lms-step-list">
+                <li><strong>Mezclar:</strong> Junta la harina y la sal en un mesón. Haz un pozo en el centro y vierte el zapallo y la manteca tibia.</li>
+                <li><strong>Integrar:</strong> Con las manos, incorpora la harina hacia el centro del pozo de forma progresiva.</li>
+                <li><strong>Amasar:</strong> Trabaja la masa firmemente durante 5 a 10 minutos hasta que esté lisa y no se pegue en los dedos.</li>
+                <li><strong>Estirar:</strong> Con un uslero, estira la masa hasta dejarla de un grosor aproximado de 5 milímetros y córtala en círculos.</li>
+              </ol>
             `,
             videoUrl: videoPlaceholder,
             durationMinutes: 15,
@@ -141,7 +160,20 @@ export const demoCourses: Course[] = [
             title: "El Arte de Freír",
             summary: "Temperatura y tiempos para que queden crujientes y doradas.",
             html: `
-              <p>Fríe las sopaipillas en abundante aceite bien caliente (a unos 175°C) por unos 2 a 3 minutos por lado, hasta que estén doradas. Escurre en papel absorbente antes de servir.</p>
+              <p>La fritura es el paso final que define la textura. Una temperatura inadecuada puede hacer que las sopaipillas absorban demasiado aceite o se quemen por fuera quedando crudas por dentro.</p>
+              
+              <div class="lms-card-warning">
+                <div>
+                  <strong>¡Atención con la Fritura!</strong> El aceite debe estar a una temperatura constante de aproximadamente 175°C.
+                </div>
+              </div>
+
+              <ol class="lms-step-list">
+                <li><strong>Calentar:</strong> Utiliza abundante aceite de buena calidad en una olla profunda.</li>
+                <li><strong>Perforar:</strong> Pincha cada sopaipilla con un tenedor antes de freír para evitar que se inflen demasiado en el aceite.</li>
+                <li><strong>Freír:</strong> Cocina de 2 a 3 minutos por lado hasta obtener un color dorado parejo.</li>
+                <li><strong>Escurrir:</strong> Retira con espumadera y colócalas sobre papel absorbente para eliminar el exceso de grasa.</li>
+              </ol>
             `,
             videoUrl: videoPlaceholder,
             durationMinutes: 10,
@@ -152,6 +184,12 @@ export const demoCourses: Course[] = [
             summary: "Responde las preguntas finales para completar y cerrar el curso.",
             html: `
               <p>Responde correctamente todas las preguntas para desbloquear la finalización de este curso.</p>
+              
+              <div class="lms-card-info">
+                <div>
+                  <strong>Evaluación Final:</strong> Pon a prueba lo aprendido sobre ingredientes, amasado y tiempos de cocción de las sopaipillas chilenas.
+                </div>
+              </div>
             `,
             videoUrl: videoPlaceholder,
             durationMinutes: 15,
@@ -198,6 +236,18 @@ export const demoCourses: Course[] = [
             summary: "Cuánta luz necesitan y cómo detectar la falta de sol.",
             html: `
               <p>Las suculentas aman la luz solar. Requieren de 4 a 6 horas de sol diario filtrado o directo suave para evitar la etiolación (cuando se estiran buscando luz).</p>
+              
+              <div class="lms-card-info">
+                <div>
+                  <strong>Regla de Oro de Luz:</strong> Si la planta comienza a estirarse, perder su color vivo o a separarse demasiado entre hojas, es síntoma inequívoco de que le falta luz.
+                </div>
+              </div>
+
+              <div class="lms-card-tip">
+                <div>
+                  <strong>Tip de Ubicación:</strong> Colócalas cerca de ventanas orientadas al norte o este para recibir la mejor iluminación del día.
+                </div>
+              </div>
             `,
             videoUrl: videoPlaceholder,
             durationMinutes: 10,
@@ -207,7 +257,20 @@ export const demoCourses: Course[] = [
             title: "Método de Riego",
             summary: "El secreto del riego: remojo y secado.",
             html: `
-              <p>El error número uno es el riego excesivo. Riega de forma abundante hasta que el agua salga por el drenaje, y no vuelvas a regar hasta que la tierra esté 100% seca.</p>
+              <p>El error número uno en el cultivo de suculentas es el riego excesivo, el cual pudre las raíces de forma irreversible.</p>
+              
+              <div class="lms-card-warning">
+                <div>
+                  <strong>¡Importante!</strong> Riega solo cuando el sustrato esté 100% seco. Es mejor pecar de regar poco que de regar en exceso.
+                </div>
+              </div>
+
+              <ol class="lms-step-list">
+                <li><strong>Observar:</strong> Revisa el estado de la tierra introduciendo un palito de madera hasta el fondo.</li>
+                <li><strong>Regar:</strong> Moja abundantemente toda la tierra de la maceta hasta que veas salir agua por abajo.</li>
+                <li><strong>Drenar:</strong> Deja que todo el excedente escurra. NUNCA dejes agua empozada en el platillo de la maceta.</li>
+                <li><strong>Esperar:</strong> No vuelvas a regar hasta que la tierra esté completamente seca otra vez (aproximadamente cada 10 o 15 días, dependiendo del clima).</li>
+              </ol>
             `,
             videoUrl: videoPlaceholder,
             durationMinutes: 10,
@@ -224,7 +287,24 @@ export const demoCourses: Course[] = [
             title: "Tierra y Drenaje",
             summary: "Preparando el hogar perfecto para tu suculenta.",
             html: `
-              <p>Usa un sustrato especial para cactus y suculentas que contenga arena gruesa, perlita y turba. La maceta SIEMPRE debe tener agujero de drenaje en la base.</p>
+              <p>Para evitar la humedad excesiva, las suculentas necesitan un suelo poroso y suelto que permita el rápido paso del agua.</p>
+              
+              <div class="lms-card-info">
+                <div>
+                  <strong>Sustrato Recomendado:</strong>
+                  <ul style="list-style-type: disc; padding-left: 1.25rem; margin-top: 0.5rem;">
+                    <li>3 tazas de tierra de hojas.</li>
+                    <li>2 tazas de arena gruesa o de lámpara.</li>
+                    <li>2 tazas de piedra de perlita o piedra pómez fina.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="lms-card-warning">
+                <div>
+                  <strong>Regla Obligatoria:</strong> La maceta SIEMPRE debe tener un orificio de drenaje en su base para evitar que las raíces permanezcan empapadas.
+                </div>
+              </div>
             `,
             videoUrl: videoPlaceholder,
             durationMinutes: 15,
@@ -235,6 +315,12 @@ export const demoCourses: Course[] = [
             summary: "Demuestra tus conocimientos para finalizar el curso.",
             html: `
               <p>Responde correctamente todas las preguntas para desbloquear la finalización de este curso.</p>
+              
+              <div class="lms-card-tip">
+                <div>
+                  <strong>Evaluación Final:</strong> Demuestra que comprendes el riego, la luz y la tierra recomendada para estas increíbles plantas.
+                </div>
+              </div>
             `,
             videoUrl: videoPlaceholder,
             durationMinutes: 15,

@@ -100,3 +100,107 @@ textarea,
 select {
   font: inherit;
 }
+
+/* LMS Rich Content Blocks */
+.lms-card-info {
+  background-color: var(--surface-soft);
+  border-left: 4px solid var(--accent);
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  margin: 1.5rem 0;
+  display: flex;
+  gap: 0.75rem;
+}
+.lms-card-info::before {
+  content: "💡";
+  font-size: 1.25rem;
+}
+
+.lms-card-warning {
+  background-color: rgba(245, 158, 11, 0.08);
+  border-left: 4px solid #f59e0b;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  margin: 1.5rem 0;
+  display: flex;
+  gap: 0.75rem;
+  color: var(--foreground);
+}
+.lms-card-warning::before {
+  content: "⚠️";
+  font-size: 1.25rem;
+}
+
+.lms-card-tip {
+  background-color: rgba(16, 185, 129, 0.08);
+  border-left: 4px solid #10b981;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  margin: 1.5rem 0;
+  display: flex;
+  gap: 0.75rem;
+}
+.lms-card-tip::before {
+  content: "✅";
+  font-size: 1.25rem;
+}
+
+.lms-step-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+  counter-reset: lms-step-counter;
+}
+.lms-step-list li {
+  position: relative;
+  padding-left: 3rem;
+  margin-bottom: 1rem;
+  min-height: 2.25rem;
+  display: flex;
+  align-items: center;
+}
+.lms-step-list li::before {
+  counter-increment: lms-step-counter;
+  content: counter(lms-step-counter);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.lms-code-block {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.875rem;
+  margin: 1.5rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-x: auto;
+  position: relative;
+}
+.lms-code-block::before {
+  content: "";
+  display: block;
+  height: 0.75rem;
+  width: 2.5rem;
+  background: radial-gradient(circle, #ef4444 0.15rem, transparent 0.16rem),
+              radial-gradient(circle, #f59e0b 0.15rem, transparent 0.16rem),
+              radial-gradient(circle, #10b981 0.15rem, transparent 0.16rem);
+  background-size: 0.75rem 0.75rem;
+  background-repeat: no-repeat;
+  background-position: 0 0, 0.75rem 0, 1.5rem 0;
+  margin-bottom: 0.75rem;
+}
