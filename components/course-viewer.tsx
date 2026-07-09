@@ -266,11 +266,25 @@ export function CourseViewer({
       <section className="space-y-6 rounded-[1.75rem] border border-[color:var(--border)] bg-[var(--surface)] p-5 shadow-sm sm:p-6 lg:p-8">
         {completedPercent === 100 && (
           <div className="rounded-3xl border border-green-200 bg-green-50 p-5 dark:bg-green-950/20 dark:border-green-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <style>{`
+              .lms-completion-title {
+                color: #065f46 !important;
+              }
+              .lms-completion-subtitle {
+                color: #047857 !important;
+              }
+              .dark .lms-completion-title {
+                color: #34d399 !important;
+              }
+              .dark .lms-completion-subtitle {
+                color: #a7f3d0 !important;
+              }
+            `}</style>
             <div className="flex gap-3">
               <span className="text-2xl mt-0.5">🎉</span>
               <div className="text-left">
-                <h4 className="font-semibold" style={{ color: "#065f46" }}>¡Felicitaciones! Has completado el curso</h4>
-                <p className="text-xs mt-0.5" style={{ color: "#047857" }}>Ya tienes acceso a tu certificado digital oficial de finalización.</p>
+                <h4 className="font-semibold lms-completion-title">¡Felicitaciones! Has completado el curso</h4>
+                <p className="text-xs mt-0.5 lms-completion-subtitle">Ya tienes acceso a tu certificado digital oficial de finalización.</p>
               </div>
             </div>
             <Link

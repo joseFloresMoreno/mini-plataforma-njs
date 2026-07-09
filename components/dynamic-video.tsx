@@ -38,7 +38,7 @@ export function DynamicVideo({ url }: DynamicVideoProps) {
     <div className="relative w-full overflow-hidden bg-black aspect-video rounded-2xl">
       {video.type === "youtube" && (
         <iframe
-          src={`https://www.youtube-nocookie.com/embed/${video.id}?rel=0&modestbranding=1`}
+          src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=0&controls=1&rel=0&modestbranding=1&fs=1&iv_load_policy=3&showinfo=0`}
           title="YouTube Video Player"
           className="absolute inset-0 h-full w-full border-0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
