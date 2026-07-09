@@ -156,7 +156,7 @@ export default function DashboardPage() {
                   {courses.map((course) => (
                     <CourseCard
                       key={course.id}
-                      course={course}
+                      course={{ ...course, isEnrolled: true }}
                       userId={user.id}
                       onEnrollSuccess={() => fetchDashboardData(user.id)}
                     />
