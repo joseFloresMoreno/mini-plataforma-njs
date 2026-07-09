@@ -146,14 +146,14 @@ export default function DashboardPage() {
             <div>
               <div className="mb-6">
                 <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-700">
-                  Catálogo de Cursos Libres
+                  Mis Cursos Matriculados
                 </p>
-                <h2 className="mt-2 text-2xl font-semibold text-[color:var(--foreground)]">Explora y Matrícualte Gratis</h2>
+                <h2 className="mt-2 text-2xl font-semibold text-[color:var(--foreground)]">Mis Cursos</h2>
               </div>
 
-              {data.allCourses.length > 0 ? (
+              {courses.length > 0 ? (
                 <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                  {data.allCourses.map((course) => (
+                  {courses.map((course) => (
                     <CourseCard
                       key={course.id}
                       course={course}
@@ -163,8 +163,9 @@ export default function DashboardPage() {
                   ))}
                 </div>
               ) : (
-                <div className="rounded-[1.75rem] border border-[color:var(--border)] bg-[var(--surface)] p-8 text-slate-500">
-                  No hay cursos disponibles en el catálogo todavía.
+                <div className="rounded-[1.75rem] border border-dashed border-[color:var(--border)] bg-[var(--surface)] p-8 text-center text-slate-500">
+                  <p className="font-semibold">Aún no te has matriculado en ningún curso.</p>
+                  <p className="text-sm mt-1">Explora la pestaña "Cursos" arriba para comenzar.</p>
                 </div>
               )}
             </div>
