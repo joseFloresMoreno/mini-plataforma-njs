@@ -5,6 +5,7 @@ import type { Course } from "@/lib/lms-data";
 import { flattenCourseSections } from "@/lib/lms-data";
 import { CourseQuiz } from "./course-quiz";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { AIChatbox } from "./ai-chatbox";
 
 type CourseViewerProps = {
@@ -262,6 +263,23 @@ export function CourseViewer({
       </aside>
 
       <section className="space-y-6 rounded-[1.75rem] border border-[color:var(--border)] bg-[var(--surface)] p-5 shadow-sm sm:p-6 lg:p-8">
+        {completedPercent === 100 && (
+          <div className="rounded-3xl border border-green-200 bg-green-50 p-5 dark:bg-green-950/20 dark:border-green-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex gap-3">
+              <span className="text-2xl mt-0.5">🎉</span>
+              <div className="text-left">
+                <h4 className="font-semibold text-green-900 dark:text-green-400">¡Felicitaciones! Has completado el curso</h4>
+                <p className="text-xs text-green-700 dark:text-green-300/80 mt-0.5">Ya tienes acceso a tu certificado digital oficial de finalización.</p>
+              </div>
+            </div>
+            <Link
+              href={`/courses/${course.id}/certificate`}
+              className="inline-flex h-9 items-center justify-center rounded-full bg-green-600 px-5 text-xs font-semibold !text-white transition hover:bg-green-500 shrink-0 text-center"
+            >
+              🎓 Obtener certificado
+            </Link>
+          </div>
+        )}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-blue-700">

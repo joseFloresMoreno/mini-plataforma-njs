@@ -80,14 +80,24 @@ export function CourseCard({ course, userId, onEnrollSuccess }: CourseCardProps)
           </p>
         </div>
       )}
-      <div className="mt-6 mt-auto">
+      <div className="mt-6 mt-auto space-y-2">
         {course.isEnrolled ? (
-          <Link
-            href={`/courses/${course.id}`}
-            className="inline-flex h-11 w-full items-center justify-center rounded-full bg-blue-600 px-4 text-sm font-semibold !text-white transition hover:bg-blue-500"
-          >
-            Abrir curso
-          </Link>
+          <>
+            <Link
+              href={`/courses/${course.id}`}
+              className="inline-flex h-11 w-full items-center justify-center rounded-full bg-blue-600 px-4 text-sm font-semibold !text-white transition hover:bg-blue-500"
+            >
+              Abrir curso
+            </Link>
+            {course.progressPercent === 100 && (
+              <Link
+                href={`/courses/${course.id}/certificate`}
+                className="inline-flex h-11 w-full items-center justify-center rounded-full border border-blue-600 bg-transparent px-4 text-sm font-semibold text-blue-600 transition hover:bg-blue-50 dark:hover:bg-blue-950/30"
+              >
+                🎓 Ver certificado
+              </Link>
+            )}
+          </>
         ) : (
           <button
             type="button"
