@@ -174,22 +174,24 @@ export function AIChatbox({ courseId, courseTitle }: AIChatboxProps) {
       {/* Floating Button Container */}
       <div className="relative flex items-center justify-end">
         {showTooltip && !isOpen && (
-          <div className="absolute right-16 bottom-0 mr-2 flex w-64 items-center justify-between gap-3 rounded-2xl border border-blue-200 bg-blue-50 p-3 shadow-lg">
-            <div className="text-xs text-blue-800 leading-normal">
-              <span className="font-semibold block mb-0.5">🤖 Tutor de IA Activo</span>
-              ¡Haz clic aquí si tienes dudas sobre el curso!
+          <div className="absolute right-16 bottom-0 mr-3 flex w-80 items-start justify-between gap-3.5 rounded-[1.5rem] bg-gradient-to-br from-blue-600 to-indigo-700 p-4 text-white shadow-2xl border border-blue-500/30 transition-all animate-bounce">
+            <div className="flex gap-2.5">
+              <span className="text-2xl mt-0.5">🤖</span>
+              <div className="text-xs leading-relaxed text-left">
+                <span className="font-semibold block text-sm mb-0.5 text-blue-100">¿Tienes dudas del curso?</span>
+                Pregúntame sobre cualquier lección, receta o ingrediente. ¡Te responderé al instante!
+              </div>
             </div>
             <button
               type="button"
               onClick={dismissTooltip}
-              className="text-blue-500 hover:text-blue-700 text-xs font-bold px-1 transition"
+              className="text-white/60 hover:text-white text-sm font-bold px-1 transition"
               aria-label="Cerrar aviso"
             >
               ✕
             </button>
             {/* Arrow */}
-            <div className="absolute top-1/2 -right-2 h-0 w-0 -translate-y-1/2 border-y-8 border-y-transparent border-l-8 border-l-blue-200" />
-            <div className="absolute top-1/2 -right-1.5 h-0 w-0 -translate-y-1/2 border-y-6 border-y-transparent border-l-6 border-l-blue-50" />
+            <div className="absolute top-1/2 -right-2 h-0 w-0 -translate-y-1/2 border-y-8 border-y-transparent border-l-8 border-l-indigo-700" />
           </div>
         )}
 
