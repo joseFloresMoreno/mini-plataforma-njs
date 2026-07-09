@@ -299,7 +299,15 @@ export async function getDemoUserByEmail(email: string): Promise<DemoUser | null
   if (isKvConfigured && kvClient) {
     try {
       const user = await kvClient.get<DemoUser>(`lms:user:email:${email.toLowerCase()}`);
-      if (user) return user;
+      if (user) {
+        // Auto-index user in global list if missing (for legacy registrations)
+        const list = await kvClient.get<DemoUser[]>("lms:users:list") || [];
+        if (!list.some((u) => u.id === user.id)) {
+          list.push(user);
+          await kvClient.set("lms:users:list", list);
+        }
+        return user;
+      }
     } catch (e) {
       console.error("Error reading user by email from Vercel KV:", e);
     }
@@ -313,7 +321,15 @@ export async function getDemoUserById(userId: string): Promise<DemoUser | null> 
   if (isKvConfigured && kvClient) {
     try {
       const user = await kvClient.get<DemoUser>(`lms:user:id:${userId}`);
-      if (user) return user;
+      if (user) {
+        // Auto-index user in global list if missing
+        const list = await kvClient.get<DemoUser[]>("lms:users:list") || [];
+        if (!list.some((u) => u.id === user.id)) {
+          list.push(user);
+          await kvClient.set("lms:users:list", list);
+        }
+        return user;
+      }
     } catch (e) {
       console.error("Error reading user by id from Vercel KV:", e);
     }
