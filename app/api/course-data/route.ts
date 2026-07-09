@@ -15,7 +15,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  if (!user.enrolledCourseIds.includes(courseId)) {
+  if (user.role !== "admin" && !user.enrolledCourseIds.includes(courseId)) {
     return NextResponse.json({ error: "User not enrolled in this course" }, { status: 403 });
   }
 

@@ -522,8 +522,13 @@ export async function getDashboardCourses(userId: string): Promise<DashboardCour
     return [];
   }
 
-  const coursePromises = user.enrolledCourseIds.map(async (courseId) => {
-    const course = getCourseById(courseId);
+  const coursesToMap = user.role === "admin"
+    ? demoCourses
+    : user.enrolledCourseIds
+        .map((id) => demoCourses.find((c) => c.id === id))
+        .filter((c): c is typeof demoCourses[0] => !!c);
+
+  const coursePromises = coursesToMap.map(async (course) => {
 
     if (!course) {
       return null;

@@ -23,12 +23,21 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
   const [form, setForm] = useState<LoginState>(initialState);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [enrollCourseId, setEnrollCourseId] = useState<string | null>(null);
 
   useEffect(() => {
     try {
       localStorage.removeItem("lms_user");
     } catch (e) {
       // Ignore in SSR
+    }
+
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const enrollId = params.get("enrollCourseId");
+      if (enrollId) {
+        setEnrollCourseId(enrollId);
+      }
     }
   }, []);
 
@@ -59,8 +68,27 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
         document.cookie = `lms_session=${payload.token}; path=/; max-age=${60 * 60 * 24 * 7}; ${isSecure ? "secure;" : ""} samesite=lax`;
       }
 
-      if (payload?.user) {
-        localStorage.setItem("lms_user", JSON.stringify(payload.user));
+      let activeUser = payload?.user;
+      if (activeUser && enrollCourseId) {
+        try {
+          const enrollRes = await fetch("/api/enroll", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: activeUser.id, courseId: enrollCourseId }),
+          });
+          if (enrollRes.ok) {
+            const enrollPayload = await enrollRes.json();
+            if (enrollPayload?.user) {
+              activeUser = enrollPayload.user;
+            }
+          }
+        } catch {
+          // Ignore enrollment failure, proceed to redirect
+        }
+      }
+
+      if (activeUser) {
+        localStorage.setItem("lms_user", JSON.stringify(activeUser));
       }
 
       router.replace(redirectTo);
