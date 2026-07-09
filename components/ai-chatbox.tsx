@@ -179,7 +179,7 @@ export function AIChatbox({ courseId, courseTitle }: AIChatboxProps) {
               <span className="text-2xl mt-0.5">🤖</span>
               <div className="text-xs leading-relaxed text-left">
                 <span className="font-semibold block text-sm mb-0.5 text-blue-100">¿Tienes dudas del curso?</span>
-                Pregúntame sobre cualquier lección, receta o ingrediente. ¡Te responderé al instante!
+                Pregúntame sobre cualquier lección o contenido del curso "{courseTitle}". ¡Te responderé al instante!
               </div>
             </div>
             <button
