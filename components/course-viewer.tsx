@@ -5,6 +5,7 @@ import type { Course } from "@/lib/lms-data";
 import { flattenCourseSections } from "@/lib/lms-data";
 import { CourseQuiz } from "./course-quiz";
 import { useRouter } from "next/navigation";
+import { AIChatbox } from "./ai-chatbox";
 
 type CourseViewerProps = {
   course: Course;
@@ -325,6 +326,7 @@ export function CourseViewer({
           </div>
         </article>
       </section>
+      <AIChatbox courseId={course.id} courseTitle={course.title} />
     </div>
   );
 }
