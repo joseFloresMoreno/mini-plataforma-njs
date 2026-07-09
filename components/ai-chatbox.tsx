@@ -26,6 +26,28 @@ function getMessageText(m: any): string {
 export function AIChatbox({ courseId, courseTitle }: AIChatboxProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  useEffect(() => {
+    try {
+      const seen = localStorage.getItem("lms_chat_advice_seen");
+      if (!seen) {
+        const timer = setTimeout(() => setShowTooltip(true), 2000);
+        return () => clearTimeout(timer);
+      }
+    } catch {
+      // Ignore
+    }
+  }, []);
+
+  const dismissTooltip = () => {
+    setShowTooltip(false);
+    try {
+      localStorage.setItem("lms_chat_advice_seen", "true");
+    } catch {
+      // Ignore
+    }
+  };
 
   const { messages, sendMessage, status, error } = useChat({
     transport: new DefaultChatTransport({
@@ -149,19 +171,46 @@ export function AIChatbox({ courseId, courseTitle }: AIChatboxProps) {
         </div>
       )}
 
-      {/* Floating Button */}
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-xl active:translate-y-0"
-        aria-label="Abrir asistente de IA"
-      >
-        {isOpen ? (
-          <span className="text-xl">✕</span>
-        ) : (
-          <span className="text-2xl">🤖</span>
+      {/* Floating Button Container */}
+      <div className="relative flex items-center justify-end">
+        {showTooltip && !isOpen && (
+          <div className="absolute right-16 bottom-0 mr-2 flex w-64 items-center justify-between gap-3 rounded-2xl border border-blue-200 bg-blue-50 p-3 shadow-lg">
+            <div className="text-xs text-blue-800 leading-normal">
+              <span className="font-semibold block mb-0.5">🤖 Tutor de IA Activo</span>
+              ¡Haz clic aquí si tienes dudas sobre el curso!
+            </div>
+            <button
+              type="button"
+              onClick={dismissTooltip}
+              className="text-blue-500 hover:text-blue-700 text-xs font-bold px-1 transition"
+              aria-label="Cerrar aviso"
+            >
+              ✕
+            </button>
+            {/* Arrow */}
+            <div className="absolute top-1/2 -right-2 h-0 w-0 -translate-y-1/2 border-y-8 border-y-transparent border-l-8 border-l-blue-200" />
+            <div className="absolute top-1/2 -right-1.5 h-0 w-0 -translate-y-1/2 border-y-6 border-y-transparent border-l-6 border-l-blue-50" />
+          </div>
         )}
-      </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setIsOpen(!isOpen);
+            if (showTooltip) {
+              dismissTooltip();
+            }
+          }}
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-xl active:translate-y-0"
+          aria-label="Abrir asistente de IA"
+        >
+          {isOpen ? (
+            <span className="text-xl">✕</span>
+          ) : (
+            <span className="text-2xl">🤖</span>
+          )}
+        </button>
+      </div>
     </div>
   );
 }
