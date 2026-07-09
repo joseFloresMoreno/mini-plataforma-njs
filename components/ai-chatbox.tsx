@@ -92,7 +92,7 @@ export function AIChatbox({ courseId, courseTitle }: AIChatboxProps) {
                 </div>
                 <h4 className="text-sm font-semibold text-[color:var(--foreground)]">¿Tienes alguna duda?</h4>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Hola, soy tu tutor de IA. Pregúntame sobre cualquier lección, receta o ingrediente de este curso. ¡Te responderé de inmediato!
+                  Hola, soy tu tutor de IA. Pregúntame sobre cualquier lección o contenido del curso "{courseTitle}". ¡Te responderé de inmediato!
                 </p>
               </div>
             ) : (
