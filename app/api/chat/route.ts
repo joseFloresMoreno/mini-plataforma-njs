@@ -41,9 +41,30 @@ REGLAS ESTRICTAS DE RESPUESTA:
 2. Si la consulta del usuario trata sobre cualquier otro tema que NO esté relacionado con "${course.title}" (por ejemplo: otros lenguajes de programación, temas generales, tareas externas, recetas ajenas al curso, etc.), debes rechazar responder amablemente. Di textualmente que como tutor del curso "${course.title}", solo estás capacitado para responder dudas sobre este tema en concreto e invita al usuario a enfocarse en la materia del curso.
 3. Responde siempre en español, con un tono motivador, claro y conciso. Puedes usar formato Markdown básico para hacer listas o destacar texto.`;
 
+    // Convert UIMessages (which might have parts) into CoreMessages (which require content string)
+    const coreMessages = messages.map((m: any) => {
+      let content = "";
+      if (typeof m.content === "string" && m.content) {
+        content = m.content;
+      } else if (Array.isArray(m.parts)) {
+        content = m.parts
+          .map((part: any) => {
+            if (part.type === "text") {
+              return part.text;
+            }
+            return "";
+          })
+          .join("");
+      }
+      return {
+        role: m.role,
+        content: content,
+      };
+    });
+
     const result = streamText({
       model: google("gemini-1.5-flash"),
-      messages,
+      messages: coreMessages,
       system: systemPrompt,
     });
 
