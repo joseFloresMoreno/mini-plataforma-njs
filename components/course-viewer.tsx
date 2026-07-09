@@ -7,6 +7,7 @@ import { CourseQuiz } from "./course-quiz";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AIChatbox } from "./ai-chatbox";
+import { DynamicVideo } from "./dynamic-video";
 
 type CourseViewerProps = {
   course: Course;
@@ -298,6 +299,11 @@ export function CourseViewer({
 
         <article className="rounded-[1.5rem] border border-[color:var(--border)] bg-[var(--surface)] p-6 sm:p-8">
           <div className="max-w-none space-y-6 text-[15px] leading-8 text-[color:var(--foreground)]">
+            {activeSection.videoUrl && (
+              <div className="mb-4 overflow-hidden rounded-2xl border border-[color:var(--border)] shadow-sm">
+                <DynamicVideo url={activeSection.videoUrl} />
+              </div>
+            )}
             <div className="rounded-3xl border border-[color:var(--border)] bg-[var(--content-bg)] p-5">
               <div
                 className="prose prose-slate max-w-none prose-p:leading-8 prose-li:leading-8"
