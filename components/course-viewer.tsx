@@ -269,8 +269,8 @@ export function CourseViewer({
             <div className="flex gap-3">
               <span className="text-2xl mt-0.5">🎉</span>
               <div className="text-left">
-                <h4 className="font-semibold text-green-900 dark:text-green-400">¡Felicitaciones! Has completado el curso</h4>
-                <p className="text-xs text-green-700 dark:text-green-300/80 mt-0.5">Ya tienes acceso a tu certificado digital oficial de finalización.</p>
+                <h4 className="font-semibold text-slate-800 dark:text-green-400">¡Felicitaciones! Has completado el curso</h4>
+                <p className="text-xs text-slate-600 dark:text-green-300/80 mt-0.5">Ya tienes acceso a tu certificado digital oficial de finalización.</p>
               </div>
             </div>
             <Link
