@@ -364,6 +364,312 @@ export const demoCourses: Course[] = [
       },
     ],
   },
+  {
+    id: "comida-coreana",
+    slug: "cocina-coreana-tradicional",
+    title: "Cocina Coreana Tradicional y Moderna",
+    description:
+      "Descubre los secretos del Kimchi, el Bibimbap, el Bulgogi y las bases de la sazón en la península coreana.",
+    overview:
+      "Aprende desde las técnicas de fermentación ancestral hasta los platos urbanos más icónicos de Seúl con interactivos únicos.",
+    level: "Intermedio",
+    duration: "4h 30m",
+    instructor: "Chef Sang-hoon Kim",
+    accent: "from-red-500 to-blue-600",
+    modules: [
+      {
+        id: "kor-m1",
+        title: "Bases y Fermentación",
+        description: "El arte del Kimchi y los condimentos fermentados.",
+        sections: [
+          {
+            id: "kor-m1-s1",
+            title: "Introducción al Kimchi",
+            summary: "Fermentación paso a paso y la receta tradicional.",
+            html: `
+              <p>El Kimchi es el plato nacional de Corea, un acompañamiento fermentado a base de col china, ajo, jengibre y chile coreano (gochugaru).</p>
+              
+              <div class="lms-card-info">
+                <div>
+                  <strong>Beneficios:</strong> Es un superalimento rico en probióticos, vitaminas A, B y C, y fortalece el sistema inmunológico.
+                </div>
+              </div>
+
+              <!-- CSS Modal Trigger -->
+              <input type="checkbox" id="k-modal-check" style="display: none;" class="k-modal-state" />
+
+              <label for="k-modal-check" style="display: inline-block; background-color: #2563eb; color: white; padding: 0.75rem 1.5rem; border-radius: 9999px; font-weight: 600; cursor: pointer; margin-top: 1rem; text-align: center; transition: all 0.2s;">
+                📖 Ver Receta Secreta del Kimchi
+              </label>
+
+              <!-- CSS Modal Overlay -->
+              <div class="k-modal-overlay">
+                <div class="k-modal-box">
+                  <div class="k-modal-header">
+                    <h3>Receta de Kimchi Tradicional</h3>
+                    <label for="k-modal-check" style="cursor: pointer; font-size: 1.25rem; color: #64748b;">✕</label>
+                  </div>
+                  <div class="k-modal-body" style="font-size: 0.875rem; line-height: 1.6; max-height: 350px; overflow-y: auto; text-align: left;">
+                    <p><strong>Paso 1: Salado.</strong> Corta 1 col china a lo largo. Espolvorea abundante sal marina entre cada hoja. Deja reposar por 2 horas hasta que esté flexible. Enjuaga 3 veces.</p>
+                    <p style="margin-top: 0.75rem;"><strong>Paso 2: La Papilla.</strong> Cocina 2 cucharadas de harina de arroz glutinoso en 1 taza de agua con 1 cucharada de azúcar hasta espesar. Deja enfriar.</p>
+                    <p style="margin-top: 0.75rem;"><strong>Paso 3: Pasta Picante.</strong> Mezcla la papilla fría con 1/2 taza de gochugaru (chile coreano), 6 dientes de ajo molidos, 1 cucharadita de jengibre y 3 cucharadas de salsa de pescado.</p>
+                    <p style="margin-top: 0.75rem;"><strong>Paso 4: Mezcla.</strong> Agrega cebollín y rábano cortados en juliana a la pasta. Úntala generosamente hoja por hoja en la col. Guarda en frasco hermético y fermenta a temperatura ambiente por 24-48 horas.</p>
+                  </div>
+                </div>
+              </div>
+
+              <style>
+                .k-modal-overlay {
+                  position: fixed;
+                  top: 0;
+                  left: 0;
+                  width: 100vw;
+                  height: 100vh;
+                  background-color: rgba(15, 23, 42, 0.6);
+                  backdrop-filter: blur(4px);
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  z-index: 99999;
+                  opacity: 0;
+                  pointer-events: none;
+                  transition: opacity 0.3s ease;
+                }
+                .k-modal-state:checked ~ .k-modal-overlay {
+                  opacity: 1;
+                  pointer-events: auto;
+                }
+                .k-modal-box {
+                  background: white;
+                  border-radius: 1.5rem;
+                  padding: 2rem;
+                  width: 90%;
+                  max-width: 500px;
+                  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                  transform: scale(0.9);
+                  transition: transform 0.3s ease;
+                  color: #1e293b;
+                }
+                .k-modal-state:checked ~ .k-modal-overlay .k-modal-box {
+                  transform: scale(1);
+                }
+                .k-modal-header {
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  border-bottom: 1px solid #e2e8f0;
+                  padding-bottom: 0.75rem;
+                  margin-bottom: 1rem;
+                }
+                .k-modal-header h3 {
+                  font-weight: 700;
+                  font-size: 1.25rem;
+                  color: #0f172a;
+                  margin: 0;
+                }
+              </style>
+            `,
+            videoUrl: videoPlaceholder,
+            durationMinutes: 20,
+          },
+          {
+            id: "kor-m1-s2",
+            title: "Las Salsas Madre (Jang)",
+            summary: "Conoce el Gochujang, Doenjang y Ganjang.",
+            html: `
+              <p>La cocina coreana se fundamenta en tres condimentos principales obtenidos mediante fermentación lenta. Pasa el cursor o presiona las tarjetas para voltearlas:</p>
+              
+              <div class="k-cards-grid">
+                <!-- Card 1 -->
+                <div class="k-flip-container">
+                  <div class="k-flip-card">
+                    <div class="k-flip-front">
+                      <span style="font-size: 2rem; margin-bottom: 0.5rem;">🌶️</span>
+                      <h4>Gochujang</h4>
+                      <p style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">Voltear tarjeta</p>
+                    </div>
+                    <div class="k-flip-back">
+                      <h4>Pasta de Chile</h4>
+                      <p style="font-size: 0.8rem; line-height: 1.4; margin-top: 0.5rem;">Pasta picante y dulce hecha de soja fermentada, arroz glutinoso y gochugaru.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="k-flip-container">
+                  <div class="k-flip-card">
+                    <div class="k-flip-front">
+                      <span style="font-size: 2rem; margin-bottom: 0.5rem;">🥣</span>
+                      <h4>Doenjang</h4>
+                      <p style="font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem;">Voltear tarjeta</p>
+                    </div>
+                    <div class="k-flip-back">
+                      <h4>Pasta de Soja</h4>
+                      <p style="font-size: 0.8rem; line-height: 1.4; margin-top: 0.5rem;">Pasta salada y umami similar al miso japonés pero con un perfil más terroso y profundo.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <style>
+                .k-cards-grid {
+                  display: grid;
+                  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                  gap: 1.5rem;
+                  margin-top: 1.5rem;
+                }
+                .k-flip-container {
+                  perspective: 1000px;
+                  height: 160px;
+                }
+                .k-flip-card {
+                  width: 100%;
+                  height: 100%;
+                  position: relative;
+                  transform-style: preserve-3d;
+                  transition: transform 0.6s ease;
+                  cursor: pointer;
+                }
+                .k-flip-container:hover .k-flip-card {
+                  transform: rotateY(180deg);
+                }
+                .k-flip-front, .k-flip-back {
+                  width: 100%;
+                  height: 100%;
+                  position: absolute;
+                  backface-visibility: hidden;
+                  border-radius: 1rem;
+                  padding: 1rem;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                  text-align: center;
+                }
+                .k-flip-front {
+                  background: linear-gradient(135deg, #ef4444, #b91c1c);
+                  color: white;
+                }
+                .k-flip-back {
+                  background: white;
+                  color: #1e293b;
+                  border: 1px solid #e2e8f0;
+                  transform: rotateY(180deg);
+                }
+                .k-flip-back h4 {
+                  color: #b91c1c;
+                  font-weight: 700;
+                  margin: 0;
+                }
+              </style>
+            `,
+            videoUrl: videoPlaceholder,
+            durationMinutes: 15,
+          },
+        ],
+      },
+      {
+        id: "kor-m2",
+        title: "Platos Fuertes Icónicos",
+        description: "Preparación del Bibimbap y marinado de Bulgogi.",
+        sections: [
+          {
+            id: "kor-m2-s1",
+            title: "El Bibimbap Clásico",
+            summary: "Aprende a balancear ingredientes en un bol de piedra caliente (Dolsot).",
+            html: `
+              <p>Bibimbap se traduce literalmente como "arroz mezclado". Su belleza reside en la armonía de colores (Osaek) que representa los cinco elementos.</p>
+              
+              <div class="lms-card-tip">
+                <div>
+                  <strong>Los 5 Elementos del Bibimbap:</strong>
+                  <ul style="list-style-type: disc; padding-left: 1.25rem; margin-top: 0.5rem; font-size: 0.875rem;">
+                    <li><strong>Madera (Verde):</strong> Espinacas escaldadas.</li>
+                    <li><strong>Fuego (Rojo):</strong> Salsa Gochujang y zanahorias.</li>
+                    <li><strong>Tierra (Amarillo):</strong> Yema de huevo.</li>
+                    <li><strong>Metal (Blanco):</strong> Arroz y brotes de soja.</li>
+                    <li><strong>Agua (Negro/Oscuro):</strong> Hongos Shiitake y carne.</li>
+                  </ul>
+                </div>
+              </div>
+            `,
+            videoUrl: videoPlaceholder,
+            durationMinutes: 20,
+          },
+          {
+            id: "kor-m2-s2",
+            title: "Bulgogi (Carne Marinado)",
+            summary: "El clásico asado coreano de carne tierna marinada en soja y pera asiática.",
+            html: `
+              <p>El Bulgogi es tiras delgadas de lomo vetado marinadas. El ingrediente secreto tradicional es la pera rallada, que contiene enzimas naturales que ablandan la carne y añaden un dulzor suave.</p>
+              
+              <div class="lms-card-warning">
+                <div>
+                  <strong>¡Secreto del Chef!</strong> Deja marinar la carne por lo menos durante 2 horas (idealmente toda la noche) en el refrigerador para que las enzimas de la pera actúen.
+                </div>
+              </div>
+            `,
+            videoUrl: videoPlaceholder,
+            durationMinutes: 15,
+          },
+        ],
+      },
+      {
+        id: "kor-m3",
+        title: "Sopas y Evaluación",
+        description: "Estofado Jjigae y cuestionario final.",
+        sections: [
+          {
+            id: "kor-m3-s1",
+            title: "Kimchi Jjigae",
+            summary: "El estofado más reconfortante de Corea.",
+            html: `
+              <p>El Kimchi Jjigae es una sopa caliente y picante. Se prepara cocinando a fuego lento kimchi maduro con tofu, cebollín y panceta de cerdo.</p>
+              
+              <div class="lms-card-info">
+                <div>
+                  <strong>Tip de Sabor:</strong> Entre más maduro y fermentado esté el kimchi, más profunda y ácida será la sopa. El kimchi fresco no dará el mismo sabor.
+                </div>
+              </div>
+            `,
+            videoUrl: videoPlaceholder,
+            durationMinutes: 15,
+          },
+          {
+            id: "kor-m3-s2",
+            title: "Examen de Maestría",
+            summary: "Demuestra tus conocimientos en gastronomía coreana.",
+            html: `
+              <p>Completa con éxito el cuestionario para finalizar el curso y recibir tu aprobación.</p>
+            `,
+            videoUrl: videoPlaceholder,
+            durationMinutes: 15,
+            quiz: [
+              {
+                id: "kor-q1",
+                question: "¿Cuál es el chile coreano en polvo o escamas utilizado para hacer Kimchi?",
+                options: ["Gochugaru", "Sriracha", "Cayena", "Jalapeño"],
+                correctOptionIndex: 0,
+              },
+              {
+                id: "kor-q2",
+                question: "¿Qué ingrediente natural se usa tradicionalmente en el Bulgogi para ablandar la carne?",
+                options: ["Limón", "Vinagre", "Pera asiática", "Piña"],
+                correctOptionIndex: 2,
+              },
+              {
+                id: "kor-q3",
+                question: "¿Qué significa literalmente la palabra 'Bibimbap'?",
+                options: ["Sopa picante", "Arroz mezclado", "Fideos fritos", "Carne asada"],
+                correctOptionIndex: 1,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 const isKvConfigured = !!(
