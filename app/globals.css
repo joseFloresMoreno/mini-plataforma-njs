@@ -9,6 +9,7 @@
   --accent: #2563eb;
   --accent-strong: #1d4ed8;
   --accent-warm: #f59e0b;
+  --content-bg: #ffffff;
 }
 
 html[data-theme="dark"] {
@@ -20,6 +21,7 @@ html[data-theme="dark"] {
   --accent: #69e5f4;
   --accent-strong: #34d0ea;
   --accent-warm: #f6b73c;
+  --content-bg: #0b1524;
 }
 
 @theme inline {
