@@ -204,3 +204,43 @@ select {
   background-position: 0 0, 0.75rem 0, 1.5rem 0;
   margin-bottom: 0.75rem;
 }
+
+/* LMS Cards Slider */
+.lms-slider {
+  width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.5rem 0;
+  padding-bottom: 0.75rem;
+}
+.lms-slider::-webkit-scrollbar {
+  height: 6px;
+}
+.lms-slider::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 9999px;
+}
+.lms-slider::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 9999px;
+}
+.lms-slider-track {
+  display: flex;
+  gap: 1rem;
+}
+.lms-slider-card {
+  flex: 0 0 75%;
+  scroll-snap-align: start;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+}
+@media (min-width: 768px) {
+  .lms-slider-card {
+    flex: 0 0 31%; /* Shows 3 cards at a time on desktop */
+  }
+}

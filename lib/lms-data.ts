@@ -110,15 +110,26 @@ export const demoCourses: Course[] = [
             html: `
               <p>Las sopaipillas chilenas tradicionales se distinguen por el uso de zapallo cocido en la masa, el cual le aporta suavidad, color y un sabor único.</p>
               
-              <div class="lms-card-info">
-                <div>
-                  <strong>Ingredientes Principales:</strong>
-                  <ul style="list-style-type: disc; padding-left: 1.25rem; margin-top: 0.5rem;">
-                    <li>2 tazas de harina sin polvos de hornear.</li>
-                    <li>1 taza de zapallo molido cocido (tibio).</li>
-                    <li>3 cucharadas de manteca derretida.</li>
-                    <li>1 cucharadita de sal.</li>
-                  </ul>
+              <p>Desliza lateralmente para conocer los ingredientes clave de esta receta:</p>
+              
+              <div class="lms-slider">
+                <div class="lms-slider-track">
+                  <div class="lms-slider-card">
+                    <h4 style="font-weight: 700; color: var(--accent); margin-bottom: 0.5rem;">🌾 Harina</h4>
+                    <p style="font-size: 0.875rem; line-height: 1.5;">2 tazas de harina sin polvos de hornear. Aporta la estructura base de la sopaipilla.</p>
+                  </div>
+                  <div class="lms-slider-card">
+                    <h4 style="font-weight: 700; color: var(--accent); margin-bottom: 0.5rem;">🎃 Zapallo</h4>
+                    <p style="font-size: 0.875rem; line-height: 1.5;">1 taza de zapallo molido cocido y tibio. Aporta el color dorado y la textura suave.</p>
+                  </div>
+                  <div class="lms-slider-card">
+                    <h4 style="font-weight: 700; color: var(--accent); margin-bottom: 0.5rem;">🧈 Manteca</h4>
+                    <p style="font-size: 0.875rem; line-height: 1.5;">3 cucharadas de manteca derretida tibia. Proporciona la elasticidad y grasas necesarias.</p>
+                  </div>
+                  <div class="lms-slider-card">
+                    <h4 style="font-weight: 700; color: var(--accent); margin-bottom: 0.5rem;">🧂 Sal</h4>
+                    <p style="font-size: 0.875rem; line-height: 1.5;">1 cucharadita de sal fina. Realza los sabores dulces naturales del zapallo camote.</p>
+                  </div>
                 </div>
               </div>
 

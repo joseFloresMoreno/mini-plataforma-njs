@@ -273,7 +273,7 @@ export function CourseViewer({
 
         <article className="rounded-[1.5rem] border border-[color:var(--border)] bg-[var(--surface)] p-6 sm:p-8">
           <div className="max-w-none space-y-6 text-[15px] leading-8 text-[color:var(--foreground)]">
-            <div className="rounded-3xl border border-[color:var(--border)] bg-[var(--surface-soft)] p-5">
+            <div className="rounded-3xl border border-[color:var(--border)] bg-white dark:bg-slate-900 p-5">
               <div
                 className="prose prose-slate max-w-none prose-p:leading-8 prose-li:leading-8"
                 dangerouslySetInnerHTML={{ __html: activeSection.html }}
