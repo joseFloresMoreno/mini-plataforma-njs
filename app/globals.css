@@ -244,3 +244,15 @@ select {
     flex: 0 0 31%; /* Shows 3 cards at a time on desktop */
   }
 }
+
+/* Explicit text color overrides for rich elements to solve contrast issues */
+.lms-card-info,
+.lms-card-warning,
+.lms-card-tip,
+.lms-slider-card,
+.lms-card-info *,
+.lms-card-warning *,
+.lms-card-tip *,
+.lms-slider-card * {
+  color: var(--foreground) !important;
+}

@@ -49,6 +49,12 @@ export function CourseViewer({
     }
   }, []);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [activeSectionId]);
+
   const handleResetProgress = async () => {
     if (!window.confirm("¿Seguro que deseas reiniciar el progreso de este curso para TODOS los alumnos en el sistema?")) {
       return;
@@ -279,17 +285,7 @@ export function CourseViewer({
                 dangerouslySetInnerHTML={{ __html: activeSection.html }}
               />
             </div>
-            {activeSection.videoUrl && (
-              <div className="overflow-hidden rounded-2xl border border-[color:var(--border)] bg-slate-200">
-                <iframe
-                  title={activeSection.title}
-                  className="aspect-video w-full"
-                  src={activeSection.videoUrl}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-            )}
+
 
             {activeSectionHasQuiz && activeSection.quiz && (
               <CourseQuiz
