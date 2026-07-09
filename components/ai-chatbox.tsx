@@ -29,24 +29,13 @@ export function AIChatbox({ courseId, courseTitle }: AIChatboxProps) {
   const [showTooltip, setShowTooltip] = useState(false);
 
   useEffect(() => {
-    try {
-      const seen = localStorage.getItem("lms_chat_advice_seen");
-      if (!seen) {
-        const timer = setTimeout(() => setShowTooltip(true), 2000);
-        return () => clearTimeout(timer);
-      }
-    } catch {
-      // Ignore
-    }
+    // Show after 2 seconds delay on every course entry/mount
+    const timer = setTimeout(() => setShowTooltip(true), 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   const dismissTooltip = () => {
     setShowTooltip(false);
-    try {
-      localStorage.setItem("lms_chat_advice_seen", "true");
-    } catch {
-      // Ignore
-    }
   };
 
   const { messages, sendMessage, status, error } = useChat({
