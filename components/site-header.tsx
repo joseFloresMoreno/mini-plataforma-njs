@@ -39,6 +39,16 @@ export function SiteHeader({ brand, subtitle, actions = [] }: SiteHeaderProps) {
     }
   }, []);
 
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      localStorage.removeItem("lms_user");
+    } catch {
+      // Ignore
+    }
+    window.location.href = "/api/auth/logout";
+  };
+
   return (
     <header className="sticky top-0 z-20 border-b border-[color:var(--border)] bg-[var(--surface)] backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4 sm:px-10 lg:px-12">
@@ -67,6 +77,7 @@ export function SiteHeader({ brand, subtitle, actions = [] }: SiteHeaderProps) {
               <Link
                 key={action.href}
                 href={action.href}
+                onClick={isLogout ? handleLogout : undefined}
                 className={
                   isLogout
                     ? "inline-flex h-10 items-center rounded-full border border-red-200 bg-[var(--surface)] px-4 text-sm font-semibold text-red-600 transition hover:bg-red-50 hover:border-red-300"
