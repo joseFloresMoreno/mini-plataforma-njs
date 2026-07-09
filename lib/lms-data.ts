@@ -55,7 +55,7 @@ export type DashboardCourse = Course & {
   nextSectionTitle: string | null;
 };
 
-const videoPlaceholder = "https://www.youtube-nocookie.com/embed/ysz5S6PUM-U";
+const videoPlaceholder = "";
 
 export const demoUsers: DemoUser[] = [
   {
@@ -469,7 +469,7 @@ export const demoCourses: Course[] = [
                 }
               </style>
             `,
-            videoUrl: videoPlaceholder,
+            videoUrl: "https://youtu.be/m79GEVJbWHc",
             durationMinutes: 20,
           },
           {
