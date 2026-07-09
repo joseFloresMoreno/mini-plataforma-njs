@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type ThemeMode = "light" | "dark";
 
@@ -18,6 +18,10 @@ type ThemeToggleProps = {
 
 export function ThemeToggle({ initialTheme }: ThemeToggleProps) {
   const [theme, setTheme] = useState<ThemeMode>(initialTheme);
+
+  useEffect(() => {
+    setTheme(initialTheme);
+  }, [initialTheme]);
 
   const toggleTheme = () => {
     const nextTheme = theme === "light" ? "dark" : "light";
