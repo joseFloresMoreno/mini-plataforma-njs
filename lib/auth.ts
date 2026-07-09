@@ -8,6 +8,7 @@ export type SessionUser = {
   email: string;
   role: DemoUser["role"];
   initials: string;
+  enrolledCourseIds: string[];
 };
 
 export function getCookieValue(cookieString: string | null | undefined, name: string): string | undefined {
@@ -38,6 +39,7 @@ export function pickSessionUser(user: DemoUser): SessionUser {
     email: user.email,
     role: user.role,
     initials,
+    enrolledCourseIds: user.enrolledCourseIds || [],
   };
 }
 

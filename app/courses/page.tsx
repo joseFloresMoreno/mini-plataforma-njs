@@ -135,7 +135,7 @@ export default function CoursesPage() {
 
           <div className="grid gap-6 md:grid-cols-2">
             {courses.map((course) => {
-              const isEnrolled = user?.enrolledCourseIds.includes(course.id) || false;
+              const isEnrolled = user?.enrolledCourseIds?.includes(course.id) || false;
               const isAdmin = user?.role === "admin" || false;
 
               return (
